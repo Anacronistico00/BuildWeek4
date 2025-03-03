@@ -15,13 +15,13 @@ namespace BuildWeek4.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;            
-            //creo un'istanza della configurazione, per leggere la stringa di connessione al database
+
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true) //il secondo parametro indica l'obligatoreità del file, il terzo parametro indica se il file deve essere ricaricato e letto nuovamente quando viene modificato durante l'esecuzione del programa
+                .AddJsonFile("appsettings.json", false, true)
                 .Build();
 
-            //Lettura della configurazione dal file appsettings.json
+
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
