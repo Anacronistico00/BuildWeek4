@@ -24,3 +24,43 @@ body {
 .Logo {
     width: 200px;
 }
+
+.carousel-item{
+    position: relative;
+}
+
+.carousel-item .div1 {
+    color: white;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+}
+
+    .carousel-item .div2 {
+        color: white;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+    }
+    .carousel-item .div3 {
+        color: white;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+    }
+    .carousel-item .div4 {
+        color: white;
+        position: absolute;
+        bottom: -30%;
+        left: 20%;
+    }
+    .carousel-item .div5 {
+        color: white;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+    }
+
+    .card-img-top:hover {
+        transform: scale(1.05);
+    }

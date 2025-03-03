@@ -1,0 +1,28 @@
+﻿@model Details
+@{
+    ViewData["Title"] = "Dettagli";
+}
+
+<h3>Dettagli Carta</h3>
+
+<div class="row mt-2">
+    <div class="col col-3">
+        <img src="@Model.URLImmagine" class="w-100" />
+    </div>
+    <div class="col col-9 mt-5">
+        <div class="d-flex flex-column">
+            <div class="d-flex justify-content-between">
+                <h4>@Model.Dettaglio</h4>
+                <p>€ @Model.Prezzo.ToString("C") </p>
+            </div>
+            <p>@Model.Descrizione</p>
+            <div class="d-flex justify-content-end">
+                <form asp-controller="Home" asp-action="AddToCart" method="post" asp-route-id="@Model.IdProdotto">
+                    <button class="btn btn-primary" asp-controller="Home" asp-action="AddToCart">Aggiungi al Carrello</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>

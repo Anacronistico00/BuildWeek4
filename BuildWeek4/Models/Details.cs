@@ -1,6 +1,6 @@
 ﻿namespace BuildWeek4.Models
 {
-    public class Product
+    public class Details
     {
         public Guid IdProdotto { get; set; }
         public string? URLImmagine { get; set; }
@@ -10,6 +10,5 @@
         public string? Descrizione { get; set; }
 
         public string? Categoria { get; set; }
-
     }
 }

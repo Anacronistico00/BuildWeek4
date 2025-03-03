@@ -5,23 +5,22 @@
 }
 
 <div class="text-center">
+
     <h1 class="display-4">Di tendenza</h1>
 </div>
 
 @if (Model.Products != null && Model.Products.Count > 0)
 {
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly mx-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly mx-4 border border-dark pt-3">
             @foreach (var product in Model.Products)
             {
-                    <div class="card mx-4 my-2">
-                        <img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio">
-                        <div class="card-body">
-                            <h5 class="card-title">@product.Dettaglio</h5>
-                            <p class="card-text">@product.Prezzo.ToString("C")</p>
-                            <a href="#" class="btn btn-primary">@product.Categoria</a>
-                        </div>
+                <div class="card mx-4 my-4 border-0 p-2">
+                    <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto"><img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio"></a>
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Dettaglio</h5>
                     </div>
+                </div>
             }
     </div>
 }
