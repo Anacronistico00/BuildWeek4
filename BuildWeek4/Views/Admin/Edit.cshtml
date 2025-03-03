@@ -1,0 +1,47 @@
+﻿@model EditProduct
+
+@{   
+    ViewData["Title"] = "Modifica Prodotto";
+    var categories = ViewBag.Categoria as List<Categoria>;
+}
+<div class="container">
+
+    <h3>Modifica prodotto</h3>
+
+    <div>
+        <form method="post" asp-controller="Admin" asp-action="SaveEdit" asp-route-id="@Model.IdProdotto">
+            <input hidden asp-for="IdProdotto"/>
+            <div>
+                <label for="Dettagli" asp-for="Dettaglio" class="form-label">Dettaglio</label>
+                <input id="Dettagli" asp-for="Dettaglio" class="form-control" />
+                <span class="text-danger" asp-validation-for="Dettaglio"></span>
+            </div>
+            <div>
+                <label for="Descrizione" asp-for="Descrizione" class="form-label">Descrizione</label>
+                <textarea id="Descrizione" asp-for="Descrizione" class="form-control"></textarea>
+                <span class="text-danger" asp-validation-for="Descrizione"></span>
+            </div>
+            <div>
+                <label for="URL" asp-for="URLImmagine" class="form-label">URL Immagine</label>
+                <textarea id="URL" asp-for="URLImmagine" class="form-control"></textarea>
+                <span class="text-danger" asp-validation-for="URLImmagine"></span>
+            </div>
+            <div>
+                <label for="Prezzo" asp-for="Prezzo" class="form-label">Prezzo</label>
+                <input id="Prezzo" asp-for="Prezzo" class="form-control" />
+                <span class="text-danger" asp-validation-for="Prezzo"></span>
+            </div>
+            <div>
+                <label for="Categoria" asp-for="IdCategoria" class="form-label">Categoria</label>
+                <select id="Categoria" asp-for="IdCategoria" class="form-control">
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category.IdCategoria">@category.NomeCategoria</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-success mt-3">Conferma</button>
+            <button type="reset" class="btn btn-danger mt-3">Reset dei campi</button>
+        </form>
+    </div>
+</div>

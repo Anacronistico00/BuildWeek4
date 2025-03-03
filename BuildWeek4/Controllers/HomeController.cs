@@ -46,11 +46,9 @@ namespace BuildWeek4.Controllers
                                     Dettaglio = reader.GetString(1),
                                     Descrizione = reader.GetString(2),
                                     Categoria = reader.GetString(3),
-                                    URlImmagine = reader.GetString(4),
+                                    URLImmagine = reader.GetString(4),
                                     Prezzo = reader.GetDecimal(5)
-
-                                }
-                                );
+                                });
                         }
                     }
                 }

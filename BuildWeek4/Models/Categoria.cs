@@ -3,7 +3,7 @@
     public class Categoria
     {
         public Guid IdCategoria { get; set; }
-        public String NomeCategoria { get; set; }
+        public String? NomeCategoria { get; set; }
 
     }
 }

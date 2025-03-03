@@ -5,39 +5,23 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Di tendenza</h1>
 </div>
 
 @if (Model.Products != null && Model.Products.Count > 0)
 {
-    <table class="table table-striped table-bordered table-hover mt-3">
-        <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Prezzo</th>
-                <th>Descrizione</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly mx-4">
             @foreach (var product in Model.Products)
             {
-                <tr>
-                    <td>@product.IdProdotto</td>
-                    <td>@product.Dettaglio</td>
-                    <td>@product.Categoria</td>
-                    <td>@product.Prezzo.ToString("C")</td>
-                    <td>@product.Descrizione</td>
-                    <td>
-                        <a class="btn btn-warning" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
-                        <a class="btn btn-danger" asp-controller="Product" asp-action="delete" asp-route-id="@product.Id">Delete</a>
-
-                    </td>
-                </tr>
+                    <div class="card mx-4 my-2">
+                        <img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Dettaglio</h5>
+                            <p class="card-text">@product.Prezzo.ToString("C")</p>
+                            <a href="#" class="btn btn-primary">@product.Categoria</a>
+                        </div>
+                    </div>
             }
-        </tbody>
-    </table>
+    </div>
 }

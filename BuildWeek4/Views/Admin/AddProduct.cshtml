@@ -1,0 +1,42 @@
+﻿@model AddProductModel
+@{
+    ViewData["Title"] = "Aggiungi Prodotto";
+}
+<div class="container">
+
+<h3>Aggiungi un nuovo prodotto</h3>
+
+    <div>
+        <form asp-controller="Admin" asp-action="Create" method="post">
+            <div>
+                <label for="Dettagli" asp-for="Dettaglio" class="form-label">Dettaglio</label>
+                <input id="Dettagli" asp-for="Dettaglio" class="form-control" />
+                <span class="text-danger" asp-validation-for="Dettaglio"></span>
+            </div>
+            <div>
+                <label for="Descrizione" asp-for="Descrizione" class="form-label">Descrizione</label>
+                <input id="Descrizione" asp-for="Descrizione" class="form-control" />
+                <span class="text-danger" asp-validation-for="Descrizione"></span>
+            </div>
+            <div>
+                <label for="URLImmagine" asp-for="URLImmagine" class="form-label">URL Immagine</label>
+                <input id="URLImmagine" asp-for="URLImmagine" class="form-control" />
+                <span class="text-danger" asp-validation-for="URLImmagine"></span>
+            </div>
+            <div>
+                <label for="Prezzo" asp-for="Prezzo" class="form-label">Prezzo</label>
+                <input id="Prezzo" asp-for="Prezzo" class="form-control" />
+                <span class="text-danger" asp-validation-for="Prezzo"></span>
+            </div>
+            <div>
+                <label for="IdCategoria" asp-for="IdCategoria" class="form-label">Categoria</label>
+                <select class="form-control" asp-for="IdCategoria" asp-items="@(new SelectList(Model.Categorie, "IdCategoria", "NomeCategoria"))">
+                    <option value="">--- Seleziona una categoria ---</option>
+                </select>
+                <span class="text-danger" asp-validation-for="IdCategoria"></span>
+            </div>
+            <button class="btn btn-success mt-3">Aggiungi</button>
+            <button type="reset" class="btn btn-danger mt-3">Reset dei campi</button>
+        </form>
+    </div>
+</div>
