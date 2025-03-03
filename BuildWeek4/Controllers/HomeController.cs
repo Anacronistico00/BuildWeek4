@@ -27,8 +27,36 @@ namespace BuildWeek4.Controllers
 
         public async Task<IActionResult> Index()
         {
-            
-            return View();
+            var productList = new ProductViewModel()
+            { Products = new List<Product>() };
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = "SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, Categorie.NomeCategoria,Prodotti.URLImmagine, Prodotti.Prezzo FROM Prodotti\r\n    INNER JOIN\r\n    Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria";
+                await using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while(await reader.ReadAsync())
+                        {
+                            productList.Products.Add(
+                                new Product()
+                                {
+                                    IdProdotto = reader.GetGuid(0),
+                                    Dettaglio = reader.GetString(1),
+                                    Descrizione = reader.GetString(2),
+                                    Categoria = reader.GetString(3),
+                                    URlImmagine = reader.GetString(4),
+                                    Prezzo = reader.GetDecimal(5)
+
+                                }
+                                );
+                        }
+                    }
+                }
+            }
+
+                return View(productList);
         }
 
         public IActionResult Privacy()
