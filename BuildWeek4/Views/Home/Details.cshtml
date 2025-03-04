@@ -10,61 +10,103 @@
     </div>
 }
 
-<div class="container">
-    <h3 class="text-center">Dettagli Carta</h3>
-    <div class="container">
+<div class="container mt-5">
+    <h1>@Model.Dettaglio</h1>
+    <div class="container mt-2">
         <div class="row mt-2">
-            <div class="col col-3">
-                <img src="@Model.URLImmagine" class="w-100" />
+            <div class="container row col-md-3">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <img src="@Model.URLImmagine" class="detailsImg w-100" data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;" />
+                </div>
+                <div class="col-2"></div>
             </div>
-            <div class="col col-9 mt-5">
+            <div class="col col-12 col-md-9 mt-5 mt-lg-0">
                 <div class="d-flex flex-column">
-                    <div class="d-flex justify-content-between">
-                        <h4>@Model.Dettaglio</h4>
-                        <p>€ @Model.Prezzo.ToString("C") </p>
+                    <div>
+                        <p>@Model.Descrizione</p>
+                        <p class="text-end fw-bolder fs-4">€ @Model.Prezzo.ToString("C") </p>
                     </div>
-                    <p>@Model.Descrizione</p>
-                    @if (Model.OutOfStock)
-                    {
-                        <p class="text-end" style="color: red; font-weight: bold;">Out of Stock</p>
-                    } 
-                    else
-                    {
-                        <p class="text-end">Disponibilità: @Model.Quantita pezzi</p>
-                    }
                     <div class="d-flex justify-content-end">
-                        <form asp-controller="Home" asp-action="AggiungiAlCarrello" method="post">
-                            <input type="hidden" name="idProdotto" value="@Model.IdProdotto" />
-                            <label for="quantita">Quantità:</label>
-                            <input type="number" name="quantita" id="quantita" min="1" value="1" required class="form-control" />
-                            <button type="submit" class="btn btn-primary mt-2">Aggiungi al Carrello</button>
+                        <form asp-controller="Home" asp-action="AggiungiAlCarrello" method="post" class="d-flex d-lg-block">
+                            <div>
+                                <input type="hidden" name="idProdotto" value="@Model.IdProdotto" />
+                                <label for="quantita">Quantità:</label>
+                                <input type="number" name="quantita" id="quantita" min="1" value="1" required class="form-control mt-2" />
+                            </div>
+                            <div class="d-flex flex-column justify-content-end">
+                                @if (Model.OutOfStock)
+                                {
+                                    <p class="text-end m-0" style="color: red; font-weight: bold;">Out of Stock</p>
+                                }
+                                else if (Model.Quantita == 1)
+                                {
+                                    <p class="text-end m-0">Disponibilità: @Model.Quantita pezzo</p>
+                                }
+                                else
+                                {
+                                    <p class="text-end m-0">Disponibilità: @Model.Quantita pezzi</p>
+                                }
+                                <button type="submit" class="btn btn-primary mt-2">Aggiungi al Carrello</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <h3>Altri Prodotti</h3>
-            @if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
-            {
-                <div class="container justify-content-center">
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly align-items-center mx-4 border border-dark pt-3">
-                        @for (var i = 0; i < 8; i++)
-                        {
-                            var product = ViewBag.ProductsList[i];
-                            <div class="text-center card mx-4 my-4 border-0 p-2">
-                                <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
-                                    <img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio">
-                                </a>
-                                <div class="card-body">
-                                    <h5 class="card-title">@product.Dettaglio</h5>
-                                </div>
-                            </div>
-                        }
-                    </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <img id="modalImage" src="@Model.URLImmagine" class="w-100" />
                 </div>
-            }
-
-            
+            </div>
         </div>
     </div>
 </div>
+
+<div class="container borderDiv mt-3">
+    <h3>Potrebbe interessarti</h3>
+    @if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
+    {
+        <div class="container justify-content-center">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly align-items-center border border-dark pt-3 px-5">
+                @for (var i = 0; i < 6; i++)
+                {
+                    var product = ViewBag.ProductsList[i];
+                    <div class="text-center card border-0 p-2">
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
+                            <img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Dettaglio</h5>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+            const image = document.getElementById("modalImage");
+
+            image.addEventListener("mousemove", (e) => {
+                const { width, height, left, top } = image.getBoundingClientRect();
+                const x = (e.clientX - left) / width - 0.5;
+                const y = (e.clientY - top) / height - 0.5;
+
+                const rotateX = y * -20;
+                const rotateY = x * 20;
+
+                image.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            image.addEventListener("mouseleave", () => {
+                image.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+            });
+        });
+</script>

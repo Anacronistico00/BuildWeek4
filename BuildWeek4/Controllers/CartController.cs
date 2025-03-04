@@ -132,6 +132,13 @@ namespace BuildWeek4.Controllers
                         stockDisponibile = (int)await checkStockCommand.ExecuteScalarAsync();
                     }
 
+                    // Se lo stock non è sufficiente, mostra un errore e interrompi l'acquisto
+                    if (stockDisponibile < prodotto.Quantita)
+                    {
+                        TempData["ErroreCarrello"] = $"Non ci sono abbastanza pezzi disponibili per il prodotto {prodotto.Dettaglio}. Disponibile: {stockDisponibile}.";
+                        return RedirectToAction("VisualizzaCarrello");
+                    }
+
                     // Aggiorna lo stock, sottraendo la quantità acquistata
                     string updateStockQuery = "UPDATE Prodotti SET Stock = Stock - @Quantita WHERE IdProdotto = @IdProdotto";
 
@@ -153,7 +160,7 @@ namespace BuildWeek4.Controllers
 
             // Mostra il messaggio di conferma dell'acquisto
             TempData["AcquistoCompletato"] = "Grazie per aver acquistato! Il tuo ordine è stato completato.";
-            return RedirectToAction("VisualizzaCarrello");
+            return RedirectToAction("Index", "Home");
         }
 
     }

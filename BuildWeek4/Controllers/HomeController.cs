@@ -151,13 +151,6 @@ namespace BuildWeek4.Controllers
                     stockDisponibile = (int)await checkStockCommand.ExecuteScalarAsync();
                 }
 
-                // Se lo stock è insufficiente, aggiungi l'errore in ViewData
-                if (stockDisponibile < quantita)
-                {
-                    TempData["ErrorMessage"] = "Non ci sono abbastanza pezzi disponibili per questo prodotto.";
-                    return RedirectToAction("Details", new { id = idProdotto });
-                }
-
                 // Verifica se il prodotto è già nel carrello
                 string checkQuery = "SELECT COUNT(*) FROM Carrello WHERE IdProdotto = @IdProdotto";
                 await using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
@@ -190,7 +183,7 @@ namespace BuildWeek4.Controllers
                 }
             }
 
-            return RedirectToAction("VisualizzaCarrello", "Cart");
+            return RedirectToAction("Details", new {id = idProdotto});
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
