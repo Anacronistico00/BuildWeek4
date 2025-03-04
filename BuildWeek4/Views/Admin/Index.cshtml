@@ -20,6 +20,7 @@
                     <th>Categoria</th>
                     <th>Prezzo</th>
                     <th>Descrizione</th>
+                    <th>Stock</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                         <td>@product.Categoria</td>
                         <td>@product.Prezzo.ToString("C")</td>
                         <td>@product.Descrizione</td>
+                        <td class="text-center">@product.Quantita</td>
                         <td>
                             <a class="btn btn-warning" asp-controller="Admin" asp-action="Edit" asp-route-id="@product.IdProdotto">Modifica</a>
                             <a class="btn btn-danger" asp-controller="Admin" asp-action="delete" asp-route-id="@product.IdProdotto">Rimuovi</a>

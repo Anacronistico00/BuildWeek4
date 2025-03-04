@@ -18,7 +18,7 @@ namespace BuildWeek4.Models
 
         [Display(Name = "Dettaglio")]
         [Required(ErrorMessage = "Dettaglio Obbligatorio")]
-        [StringLength(1000, MinimumLength = 5, ErrorMessage = "i Dettagli devono essere più lungi di 5 caratteri")]
+        [StringLength(1000, MinimumLength = 2, ErrorMessage = "i Dettagli devono essere più lungi di 2 caratteri")]
         public string? Dettaglio { get; set; }
 
         [Display(Name = "Descrizione")]

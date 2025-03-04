@@ -83,6 +83,21 @@
             </div>
         </nav>
     </header>
+    <div class="search-container">
+        <div class="container my-1">
+            <form method="get" action="/Home/Ricerca">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Cerca su Cardmarket..." name="query" aria-label="Cerca">
+                    <div class="vr"></div>
+                    <button class="btn" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
     <div class="mainContainer">
         <main role="main" class="pb-3">
             @RenderBody()

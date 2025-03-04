@@ -2,6 +2,6 @@
 {
     public class ProductViewModel
     {
-        public List<Product> Products { get; set; } //mette i prodotti nella lista
+        public List<Product> Products { get; set; }
     }
 }
