@@ -137,6 +137,9 @@ body {
     align-self: stretch;
 }
 
+h3 {
+    color: #364150;
+}
 
 /*-------------TABELLA--------------*/
 th {
@@ -156,6 +159,7 @@ tr {
 td {
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-right: 15px;
 }
 
 table {
@@ -195,6 +199,12 @@ tbody tr:nth-child(even) {
     background-color: #eaf0f755;
 }
 
+tbody tr:hover {
+    cursor: pointer;
+    background-color: rgba(234, 240, 247, 0.8) !important;
+    transition: background-color 0.3s ease-in-out;
+}
+
 .icons {
     display: flex;
     flex-direction: row;
@@ -205,10 +215,37 @@ tbody tr:nth-child(even) {
 }
 
 .bi-pencil-fill,
-.bi-trash-fill {
-    color: #364451 !important;
+.bi-trash-fill,
+.bi-plus-circle {
+    color: #364451;
     font-size: 1.3rem;
     margin-right: 1rem;
+}
+
+.bi-plus-circle {
+    font-size: 1.5rem;
+}
+
+.bi-plus-circle:hover {
+    color: rgb(0, 0, 0) !important;
+    font-size: 1.7rem;
+    transition: font-size 0.01s ease-in-out;
+}
+
+.bi-pencil-fill:hover,
+.bi-trash-fill:hover {
+    color: rgb(0, 0, 0) !important;
+    font-size: 1.5rem;
+    transition: font-size 0.01s ease-in-out;
+}
+
+.img-hover-zoom {
+    transition: transform 0.3s ease;
+}
+
+.img-hover-zoom:hover {
+    transform: scale(1.2);
+    cursor: pointer;
 }
 
 /*-----------TABELLA-----------*/
