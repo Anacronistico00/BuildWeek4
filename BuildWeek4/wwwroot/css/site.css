@@ -17,10 +17,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
-
 .Logo {
     width: 200px;
 }
@@ -92,6 +88,20 @@ body {
     align-self: stretch;
 }
 
+.footer-custom {
+    color: #022169;
+}
+
+.footer-custom a {
+    color: #022169;
+}
+
+footer {
+    border-top: 10px solid #022169;
+    height: 10px;
+    line-height: 0 !important;
+}
+
 .dropImg:hover {
     transform: scale(1.02);
     background-color: lightgray;
@@ -111,7 +121,9 @@ body {
 .borderDiv {
     border-top: 3px solid #022169;
 }
-
+.detailsCard {
+    border-top: 10px solid #022169;
+}
 .BgDiv {
     background-color: #022169;
 }

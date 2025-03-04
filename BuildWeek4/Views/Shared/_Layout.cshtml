@@ -26,7 +26,7 @@
                         Scegli il tuo TCG preferito
                     </button>
                     <ul class="dropdown-menu px-2 py-0" aria-labelledby="dropdownMenuImages" style="width: 600px;">
-                        <div class="row g-3">
+                        <div class="row g-3 text-center">
                             <div class="dropImg col-6 col-lg-4">
                                 <a href="#"><img src="https://1000logos.net/wp-content/uploads/2024/02/Yu-Gi-Oh-Logo-2001.png" alt="Yugioh" class="img-fluid"></a>
                             </div>
@@ -83,31 +83,90 @@
             </div>
         </nav>
     </header>
-    <div class="search-container">
-        <div class="container my-1">
-            <form method="get" action="/Home/Ricerca">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Cerca su Cardmarket..." name="query" aria-label="Cerca">
-                    <div class="vr"></div>
-                    <button class="btn" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    </div>
     <div class="mainContainer">
-        <main role="main" class="pb-3">
+        <div class="search-container">
+            <div class="container my-1">
+                <form method="get" action="/Home/Ricerca">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Cerca su Cardmarket..." name="query" aria-label="Cerca">
+                        <div class="vr"></div>
+                        <button class="btn" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BuildWeek4 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer py-0 footer-custom">
+
+
+        <div class="container-fluid d-flex flex-column flex-md-row justify-content-between align-items-center py-1">
+
+
+            <div class="d-flex flex-wrap gap-3 fs-6 fw-semibold text-nowrap">
+                <span>Termini di servizio</span>
+                <span>Condizioni legali</span>
+                <span>Regolamento privacy</span>
+                <span>Aiuto</span>
+                <span>Offerte di lavoro</span>
+                <span>Produttori</span>
+            </div>
+
+
+            <div class="d-flex align-items-center gap-2 mt-1 mt-md-0 fs-6 fw-semibold">
+                <span>Lingua:</span>
+                <div class="dropdown">
+                    <button class="btn  btn-sm py-0 px-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Italiano
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">🇮🇹 Italiano</a></li>
+                        <li><a class="dropdown-item" href="#">🇬🇧 English</a></li>
+                        <li><a class="dropdown-item" href="#">🇫🇷 Français</a></li>
+                        <li><a class="dropdown-item" href="#">🇩🇪 Deutsch</a></li>
+                        <li><a class="dropdown-item" href="#">🇪🇸 Español</a></li>
+
+                    </ul>
+                </div>
+            </div>
+
         </div>
+
+
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center py-1">
+
+
+            <div class="fs-6 fw-semibold text-nowrap">
+                &copy; EpicCardMarket -
+                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-underline">Privacy</a>
+            </div>
+
+
+            <div class="d-flex gap-2">
+                <a href="https://www.facebook.com/CardmarketYugioh" class="fs-4">
+                    <i class="bi bi-facebook" style="color: #3b5998;"></i>
+                </a>
+                <a href="https://www.instagram.com/cardmarket_yugioh/" class="fs-4">
+                    <i class="bi bi-instagram" style="color: #ac2bac;"></i>
+                </a>
+                <a href="https://www.twitch.tv/cardmarket_yugioh" class="fs-4">
+                    <i class="bi bi-twitch" style="color:#8C45F7;"></i>
+                </a>
+                <a href="https://x.com/CardmarketYGO" class="fs-4">
+                    <i class="bi bi-twitter-x" style="color:black;"></i>
+                </a>
+                <a href="https://www.youtube.com/c/CardmarketYGO" class="fs-4">
+                    <i class="bi bi-youtube" style="color: #ed302f;"></i>
+                </a>
+            </div>
+
+        </div>
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -160,7 +160,7 @@ namespace BuildWeek4.Controllers
 
             // Mostra il messaggio di conferma dell'acquisto
             TempData["AcquistoCompletato"] = "Grazie per aver acquistato! Il tuo ordine è stato completato.";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("VisualizzaCarrello");
         }
 
     }
