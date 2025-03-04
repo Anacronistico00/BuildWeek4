@@ -3,26 +3,30 @@
     ViewData["Title"] = "Dettagli";
 }
 
-<h3>Dettagli Carta</h3>
-
-<div class="row mt-2">
-    <div class="col col-3">
-        <img src="@Model.URLImmagine" class="w-100" />
-    </div>
-    <div class="col col-9 mt-5">
-        <div class="d-flex flex-column">
-            <div class="d-flex justify-content-between">
-                <h4>@Model.Dettaglio</h4>
-                <p>€ @Model.Prezzo.ToString("C") </p>
+<div class="container">
+    <h3 class="text-center">Dettagli Carta</h3>
+    <div class="container">
+        <div class="row mt-2">
+            <div class="col col-3">
+                <img src="@Model.URLImmagine" class="w-100" />
             </div>
-            <p>@Model.Descrizione</p>
-            <div class="d-flex justify-content-end">
-                <form asp-controller="Home" asp-action="AddToCart" method="post" asp-route-id="@Model.IdProdotto">
-                    <button class="btn btn-primary" asp-controller="Home" asp-action="AddToCart">Aggiungi al Carrello</button>
-                </form>
+            <div class="col col-9 mt-5">
+                <div class="d-flex flex-column">
+                    <div class="d-flex justify-content-between">
+                        <h4>@Model.Dettaglio</h4>
+                        <p>€ @Model.Prezzo.ToString("C") </p>
+                    </div>
+                    <p>@Model.Descrizione</p>
+                    <div class="d-flex justify-content-end">
+                        <form asp-controller="Cart" asp-action="AggiungiAlCarrello" method="post">
+                            <input type="hidden" name="idProdotto" value="@Model.IdProdotto" />
+                            <label for="quantita">Quantità:</label>
+                            <input type="number" name="quantita" id="quantita" min="1" value="1" required class="form-control" />
+                            <button type="submit" class="btn btn-primary mt-2">Aggiungi al Carrello</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
 </div>

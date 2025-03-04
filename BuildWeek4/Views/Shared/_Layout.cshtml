@@ -25,50 +25,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="VisualizzaCarrello">Carrello</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div>
-        <div id="carouselExample" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="/imgs/1.png" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="/imgs/2.png" alt="Alternate Text" class="d-block w-100" />
-                </div>
-                <div class="carousel-item">
-                    <img src="/imgs/3.png" class="d-block w-100" alt="...">
-                </div>                
-                <div class="carousel-item">
-                    <img src="/imgs/4.png" class="d-block w-100" alt="...">
-                </div>                
-                <div class="carousel-item">
-                    <img src="/imgs/5.png" class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-        
-    </div>
-    <div class="container mainContainer">
+
+    <div class="mainContainer">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - BuildWeek4 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div>
+            &copy; 2025 - EpICardMarket - <a asp-area="" asp-controller="Home" asp-action="Index">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

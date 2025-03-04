@@ -1,0 +1,68 @@
+﻿@model List<Cart>
+@{
+    ViewData["Title"] = "Carrello";
+}
+
+<h3>Carrello</h3>
+@if (TempData["AcquistoCompletato"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["AcquistoCompletato"]
+    </div>
+}
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Prezzo Unitario</th>
+                <th>Quantità</th>
+                <th>Totale</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Dettaglio</td>
+                    <td>@item.Prezzo.ToString("C")</td>
+                    <td>@item.Quantita</td>
+                    <td>@(item.Prezzo * item.Quantita).ToString("C")</td>
+                    <td>
+                        <form asp-action="RimuoviDalCarrello" method="post" onsubmit="return confermaEliminazione()">
+                            <input type="hidden" name="idProdotto" value="@item.IdProdotto" />
+                            <button type="submit" class="btn btn-sm btn-danger">❌</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3 class="text-end">Totale: @Model.Sum(item => item.Prezzo * item.Quantita).ToString("C")</h3>
+
+    <form asp-action="SvuotaCarrello" method="post" class="text-end mt-3" onsubmit="return confermaSvuotamento()">
+        <button type="submit" class="btn btn-danger">Svuota Carrello</button>
+    </form>
+
+    <form asp-action="Acquista" method="post" class="text-end mt-3">
+        <button type="submit" class="btn btn-success">Acquista</button>
+    </form>
+}
+else
+{
+    <p>Il carrello è vuoto.</p>
+}
+
+<script>
+    function confermaSvuotamento() {
+        return confirm("Sei sicuro di voler svuotare il carrello?");
+    }
+
+    function confermaEliminazione() {
+        return confirm("Sei sicuro di voler rimuovere questo prodotto?");
+    }
+</script>

@@ -15,7 +15,7 @@ namespace BuildWeek4.Models
 
         [Display(Name = "Prezzo")]
         [Required(ErrorMessage = "Prezzo Obbligatorio")]
-        [Range(1, 10000, ErrorMessage = "Il Prezzo deve essere compreso tra 1 e 10000")]
+        [Range(0.01, 10000, ErrorMessage = "Il Prezzo deve essere compreso tra 0,1 e 10000")]
         public decimal Prezzo { get; set; }
 
 

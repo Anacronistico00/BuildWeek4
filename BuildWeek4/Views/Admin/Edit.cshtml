@@ -28,7 +28,7 @@
             </div>
             <div>
                 <label for="Prezzo" asp-for="Prezzo" class="form-label">Prezzo</label>
-                <input id="Prezzo" asp-for="Prezzo" class="form-control" />
+                <input id="Prezzo" asp-for="Prezzo" type="number" step="0.01" min="0.01" max="10000" class="form-control" lang="it">
                 <span class="text-danger" asp-validation-for="Prezzo"></span>
             </div>
             <div>
@@ -45,3 +45,6 @@
         </form>
     </div>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

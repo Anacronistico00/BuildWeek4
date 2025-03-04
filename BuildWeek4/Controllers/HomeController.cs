@@ -92,6 +92,47 @@ namespace BuildWeek4.Controllers
             }
             return View(details);
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> AggiungiAlCarrello(Guid idProdotto, int quantita)
+        {
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Verifica se il prodotto è già presente nel carrello
+                string checkQuery = "SELECT COUNT(*) FROM Carrello WHERE IdProdotto = @IdProdotto";
+                await using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                {
+                    int count = (int)await checkCommand.ExecuteScalarAsync();
+
+                    if (count > 0)
+                    {
+                        // Se il prodotto è già nel carrello, aggiorna la quantità
+                        string updateQuery = "UPDATE Carrello SET Quantita = Quantita + @Quantita WHERE IdProdotto = @IdProdotto";
+                        await using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                        {
+                            updateCommand.Parameters.AddWithValue("@Quantita", quantita);
+                            await updateCommand.ExecuteNonQueryAsync();
+                        }
+                    }
+                    else
+                    {
+                        // Se il prodotto non è nel carrello, inseriscilo
+                        string insertQuery = "INSERT INTO Carrello (IdProdotto, Quantita) VALUES (@IdProdotto, @Quantita)";
+                        await using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                        {
+                            insertCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                            insertCommand.Parameters.AddWithValue("@Quantita", quantita);
+                            await insertCommand.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("VisualizzaCarrello");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
