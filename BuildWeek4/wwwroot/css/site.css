@@ -65,14 +65,22 @@ body {
         transform: scale(1.05);
     }
 
+
+.navbar {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+
+
     .btn.dropdown-toggle {
     color: #022169;
     font-weight:bold;
     }
 
-.dropdown-menu {
+    .dropdown-menu {
     max-width: none;
-}
+     }
 
     .dropdown-menu img {
         width: 100%;
