@@ -46,10 +46,10 @@
         <div class="container">
             <h1 class="display-4 text-center">Di tendenza</h1>
         </div>
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly align-items-center border-top border-dark pt-3">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 justify-content-evenly align-items-center border-top border-dark pt-3">
                 @foreach (var product in Model.Products)
                 {
-                    <div class="text-center card mx-4 my-4 border-0 p-2">
+                    <div class="text-center card border-0 m-1 p-3">
                         <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto"><img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio"></a>
                         <div class="card-body">
                             <h5 class="card-title">@product.Dettaglio</h5>

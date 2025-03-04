@@ -6,84 +6,39 @@
 
 <div class="BgDiv">
     <div class="container">
-        <h3 class="text-center">Modifica o elimina un prodotto</h3>
-        <div class="d-flex justify-content-end">
-            <a class="btn btn-success" asp-controller="Admin" asp-action="AddProduct">Aggiungi un nuovo prodotto</a>
-        </div>
-<div class="container">
-    <h3 class="text-center mt-5">Modifica o elimina un prodotto</h3>
+        <h3 class="text-center pt-5">Modifica o elimina un prodotto</h3>
 
 
-@if (Model.Products != null && Model.Products.Count > 0)
-{
-        <table>
-            <thead>
-                <tr>
-                    <th>IMMAGINE</th>
-                    <th>NOME</th>
-                    <th>CATEGORIA</th>
-                    <th>PREZZO</th>
-                    <th>DESCRIZIONE</th>
-                    <th>STOCK</th>
-                    <th class="d-flex justify-content-center align-items-center"><a asp-controller="Admin" asp-action="AddProduct"><i class="bi bi-plus-circle"></i></a></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var product in Model.Products)
-                {
-                    <tr>
-                        <td><img src="@product.URLImmagine" alt="@product.Dettaglio" class="w-50 img-hover-zoom" /></td>
-                        <td>@product.Dettaglio</td>
-                        <td>@product.Categoria</td>
-                        <td>@product.Prezzo.ToString("C")</td>
-                        <td>@product.Descrizione</td>
-                        <td>@product.Quantita</td>
-                        <td>
-                            <div class="icons">
-                                <a asp-controller="Admin" asp-action="Edit" asp-route-id="@product.IdProdotto"><i
-                                        class="bi bi-pencil-fill"></i></a>
-                                <a asp-controller="Admin" asp-action="delete" asp-route-id="@product.IdProdotto"><i
-                                        class="bi bi-trash-fill"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-}
-</>
         @if (Model.Products != null && Model.Products.Count > 0)
         {
-            <table class="table table-striped table-bordered table-hover">
-                <thead class="thead-dark">
+            <table>
+                <thead>
                     <tr>
-                        <th>Immagine</th>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        <th>Prezzo</th>
-                        <th>Descrizione</th>
-                        <th>Stock</th>
-                        <th>Azioni</th>
+                        <th>IMMAGINE</th>
+                        <th>NOME</th>
+                        <th>CATEGORIA</th>
+                        <th>PREZZO</th>
+                        <th>DESCRIZIONE</th>
+                        <th>STOCK</th>
+                        <th class="d-flex justify-content-center align-items-center"><a asp-controller="Admin" asp-action="AddProduct"><i class="bi bi-plus-circle"></i></a></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var product in Model.Products)
                     {
                         <tr>
-                            <td><img src="@product.URLImmagine" alt="@product.Dettaglio" class="w-50" /></td>
+                            <td><img src="@product.URLImmagine" alt="@product.Dettaglio" class="w-50 img-hover-zoom" /></td>
                             <td>@product.Dettaglio</td>
                             <td>@product.Categoria</td>
                             <td>@product.Prezzo.ToString("C")</td>
                             <td>@product.Descrizione</td>
-                            <td class="text-center">@product.Quantita</td>
+                            <td>@product.Quantita</td>
                             <td>
                                 <div class="icons">
-                                    <a asp-controller="Admin" asp-action="Edit" asp-route-id="@product.IdProdotto">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                    <a asp-controller="Admin" asp-action="delete" asp-route-id="@product.IdProdotto">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </a>
+                                    <a asp-controller="Admin" asp-action="Edit" asp-route-id="@product.IdProdotto"><i
+                                            class="bi bi-pencil-fill"></i></a>
+                                    <a asp-controller="Admin" asp-action="delete" asp-route-id="@product.IdProdotto" onclick="return EliminaProdotto()">
+                                        <i class="bi bi-trash-fill text-danger"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -94,3 +49,7 @@
     </div>
 </div>
 
+<script>
+    function EliminaProdotto() {
+        return confirm("Sei sicuro di voler svuotare il carrello?");
+}</script>
