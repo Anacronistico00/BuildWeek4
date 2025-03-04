@@ -109,7 +109,7 @@ footer {
 }
 
 .modal-content {
-    background: transparent;
+    background: transparent !important;
     border: none;
     box-shadow: none;
 }
@@ -128,6 +128,114 @@ footer {
     background-color: #022169;
 }
 
-.BgDiv div {
+.BgDiv>div {
     background-color: white
 }
+
+/*-------------TABELLA--------------*/
+th {
+    background-color: #EAF0F7;
+    color: #364150;
+    font-weight: 500;
+    height: 4rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #D4DBE6 !important;
+}
+
+
+tr {
+    vertical-align: middle;
+}
+
+td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+}
+
+table {
+    margin-top: 5rem;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+th:nth-child(1),
+td:nth-child(1),
+th:nth-child(2),
+td:nth-child(2),
+th:nth-child(3),
+td:nth-child(3) {
+    padding-left: 2rem;
+    width: 15%;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+    width: 10%;
+}
+
+th:nth-child(6),
+td:nth-child(6) {
+    width: 8%;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+    width: 25%;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #eaf0f755;
+}
+
+tbody tr:hover {
+    cursor: pointer;
+    background-color: rgba(234, 240, 247, 0.8) !important;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-left: 2px solid #D4DBE6;
+    height: 70px;
+}
+
+.bi-pencil-fill,
+.bi-trash-fill,
+.bi-plus-circle {
+    color: #364451;
+    font-size: 1.3rem;
+    margin-right: 1rem;
+}
+
+.bi-plus-circle {
+    font-size: 1.5rem;
+}
+
+    .bi-plus-circle:hover {
+        color: rgb(0, 0, 0) !important;
+        font-size: 1.7rem;
+        transition: font-size 0.01s ease-in-out;
+    }
+
+.bi-pencil-fill:hover,
+.bi-trash-fill:hover {
+    color: rgb(0, 0, 0) !important;
+    font-size: 1.5rem;
+    transition: font-size 0.01s ease-in-out;
+}
+
+.img-hover-zoom {
+    transition: transform 0.3s ease;
+}
+
+    .img-hover-zoom:hover {
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+
