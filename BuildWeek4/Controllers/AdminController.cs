@@ -26,7 +26,10 @@ namespace BuildWeek4.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, Categorie.NomeCategoria,Prodotti.URLImmagine, Prodotti.Prezzo FROM Prodotti\r\n    INNER JOIN\r\n    Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria";
+                string query = "SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, Categorie.NomeCategoria, Prodotti.URLImmagine, Prodotti.Prezzo, Prodotti.Stock " +
+                    "FROM Prodotti " +
+                    "INNER JOIN " +
+                    "Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria";
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     await using (SqlDataReader reader = await command.ExecuteReaderAsync())
@@ -41,7 +44,8 @@ namespace BuildWeek4.Controllers
                                     Descrizione = reader.GetString(2),
                                     Categoria = reader.GetString(3),
                                     URLImmagine = reader.GetString(4),
-                                    Prezzo = reader.GetDecimal(5)
+                                    Prezzo = reader.GetDecimal(5),
+                                    Quantita = reader.GetInt32(6)
                                 });
                         }
                     }
@@ -97,7 +101,7 @@ namespace BuildWeek4.Controllers
             await using (SqlConnection connection =  new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var query = "INSERT INTO Prodotti (IdProdotto, URLImmagine, Prezzo, Dettaglio, Descrizione, IdCategoria) VALUES (@IdProdotto, @URLImmagine, @Prezzo, @Dettaglio, @Descrizione, @IdCategoria)";
+                var query = "INSERT INTO Prodotti (IdProdotto, URLImmagine, Prezzo, Dettaglio, Descrizione, IdCategoria, Stock) VALUES (@IdProdotto, @URLImmagine, @Prezzo, @Dettaglio, @Descrizione, @IdCategoria, @Quantita)";
                 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -107,6 +111,7 @@ namespace BuildWeek4.Controllers
                     command.Parameters.AddWithValue("@Dettaglio", addProductModel.Dettaglio);
                     command.Parameters.AddWithValue("@Descrizione", addProductModel.Descrizione);
                     command.Parameters.AddWithValue("@IdCategoria", addProductModel.IdCategoria);
+                    command.Parameters.AddWithValue("@Quantita", addProductModel.Quantita);
                     await command.ExecuteNonQueryAsync();
                 }
             }
@@ -135,6 +140,7 @@ namespace BuildWeek4.Controllers
                             editProduct.Prezzo = reader.GetDecimal(2);
                             editProduct.Descrizione = reader.GetString(4);
                             editProduct.IdCategoria = reader.GetGuid(5);
+                            editProduct.Quantita = reader.GetInt32(6);
                         }
                     }
                 }
@@ -149,7 +155,7 @@ namespace BuildWeek4.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "UPDATE Prodotti SET Dettaglio = @Dettaglio, URLImmagine = @URLImmagine, Prezzo = @Prezzo, Descrizione = @Descrizione, IdCategoria = @IdCategoria WHERE IdProdotto = @IdProdotto";
+                string query = "UPDATE Prodotti SET Dettaglio = @Dettaglio, URLImmagine = @URLImmagine, Prezzo = @Prezzo, Descrizione = @Descrizione, IdCategoria = @IdCategoria, Stock = @Quantita WHERE IdProdotto = @IdProdotto";
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Dettaglio", editProduct.Dettaglio);
@@ -158,6 +164,7 @@ namespace BuildWeek4.Controllers
                     command.Parameters.AddWithValue("@Descrizione", editProduct.Descrizione);
                     command.Parameters.AddWithValue("@IdCategoria", editProduct.IdCategoria);
                     command.Parameters.AddWithValue("@IdProdotto", id);
+                    command.Parameters.AddWithValue("@Quantita", editProduct.Quantita);
                     await command.ExecuteNonQueryAsync();
                 }
 

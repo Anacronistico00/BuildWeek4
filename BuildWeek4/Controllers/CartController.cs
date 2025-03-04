@@ -46,26 +46,6 @@ namespace BuildWeek4.Controllers
             return View(carrello);
         }
 
-        // Aggiungi prodotto al carrello
-        [HttpPost]
-        public async Task<IActionResult> AggiungiAlCarrello(Guid idProdotto, int quantita)
-        {
-            await using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string query = "INSERT INTO Carrello (IdProdotto, Quantita) VALUES (@IdProdotto, @Quantita)";
-                await using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@IdProdotto", idProdotto);
-                    command.Parameters.AddWithValue("@Quantita", quantita);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
-
-            return RedirectToAction("VisualizzaCarrello");
-        }
 
         // Rimuovi prodotto dal carrello
         [HttpPost]
@@ -105,27 +85,77 @@ namespace BuildWeek4.Controllers
             return RedirectToAction("VisualizzaCarrello");
         }
 
-        // Acquisto
         [HttpPost]
         public async Task<IActionResult> Acquista()
         {
+            List<Cart> carrello = new List<Cart>();
 
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-
-                // Svuota il carrello
-                string query = "DELETE FROM Carrello";
+                string query = "SELECT Carrello.IdProdotto, Prodotti.Dettaglio, Prodotti.Prezzo, Carrello.Quantita " +
+                               "FROM Carrello " +
+                               "INNER JOIN Prodotti ON Carrello.IdProdotto = Prodotti.IdProdotto";
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    await command.ExecuteNonQueryAsync();
+                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            carrello.Add(new Cart
+                            {
+                                IdProdotto = reader.GetGuid(0),
+                                Dettaglio = reader.GetString(1),
+                                Prezzo = reader.GetDecimal(2),
+                                Quantita = reader.GetInt32(3)
+                            });
+                        }
+                    }
                 }
             }
 
+            // Apre la connessione al database
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                foreach (var prodotto in carrello)
+                {
+                    // Verifica lo stock disponibile per ogni prodotto
+                    string checkStockQuery = "SELECT Stock FROM Prodotti WHERE IdProdotto = @IdProdotto";
+                    int stockDisponibile = 0;
+
+                    await using (SqlCommand checkStockCommand = new SqlCommand(checkStockQuery, connection))
+                    {
+                        checkStockCommand.Parameters.AddWithValue("@IdProdotto", prodotto.IdProdotto);
+                        stockDisponibile = (int)await checkStockCommand.ExecuteScalarAsync();
+                    }
+
+                    // Aggiorna lo stock, sottraendo la quantità acquistata
+                    string updateStockQuery = "UPDATE Prodotti SET Stock = Stock - @Quantita WHERE IdProdotto = @IdProdotto";
+
+                    await using (SqlCommand updateStockCommand = new SqlCommand(updateStockQuery, connection))
+                    {
+                        updateStockCommand.Parameters.AddWithValue("@IdProdotto", prodotto.IdProdotto);
+                        updateStockCommand.Parameters.AddWithValue("@Quantita", prodotto.Quantita);
+                        await updateStockCommand.ExecuteNonQueryAsync();
+                    }
+                }
+
+                // Svuota il carrello
+                string deleteCarrelloQuery = "DELETE FROM Carrello";
+                await using (SqlCommand deleteCarrelloCommand = new SqlCommand(deleteCarrelloQuery, connection))
+                {
+                    await deleteCarrelloCommand.ExecuteNonQueryAsync();
+                }
+            }
+
+            // Mostra il messaggio di conferma dell'acquisto
             TempData["AcquistoCompletato"] = "Grazie per aver acquistato! Il tuo ordine è stato completato.";
-            return RedirectToAction("VisualizzaCarrello");
+            return RedirectToAction("VisualizzaCarrello"); // O a qualsiasi altra vista che vuoi mostrare dopo l'acquisto
         }
+
     }
 
 }

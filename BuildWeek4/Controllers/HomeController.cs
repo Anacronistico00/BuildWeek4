@@ -61,7 +61,7 @@ namespace BuildWeek4.Controllers
 
                 return View(productList);
         }
-        
+
         public async Task<IActionResult> Details(Guid id)
         {
             var details = new Details();
@@ -70,7 +70,7 @@ namespace BuildWeek4.Controllers
             {
                 await connection.OpenAsync();
                 await using (SqlCommand command = new SqlCommand("SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, " +
-                    "Categorie.NomeCategoria, Prodotti.URLImmagine, Prodotti.Prezzo " +
+                    "Categorie.NomeCategoria, Prodotti.URLImmagine, Prodotti.Prezzo, Prodotti.Stock " +
                     "FROM Prodotti " +
                     "INNER JOIN " +
                     "Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria WHERE Prodotti.IdProdotto = @IdProdotto", connection))
@@ -86,13 +86,23 @@ namespace BuildWeek4.Controllers
                             details.Categoria = reader.GetString(3);
                             details.URLImmagine = reader.GetString(4);
                             details.Prezzo = reader.GetDecimal(5);
+                            details.Quantita = reader.GetInt32(6);
+
+                            if (details.Quantita == 0)
+                            {
+                                details.OutOfStock = true;
+                            }
+                            else
+                            {
+                                details.OutOfStock = false;
+                            }
                         }
                     }
                 }
+                return View(details);
             }
-            return View(details);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> AggiungiAlCarrello(Guid idProdotto, int quantita)
         {
@@ -100,10 +110,27 @@ namespace BuildWeek4.Controllers
             {
                 await connection.OpenAsync();
 
-                // Verifica se il prodotto è già presente nel carrello
+                // Verifica la disponibilità in stock
+                string checkStockQuery = "SELECT Stock FROM Prodotti WHERE IdProdotto = @IdProdotto";
+                int stockDisponibile = 0;
+                await using (SqlCommand checkStockCommand = new SqlCommand(checkStockQuery, connection))
+                {
+                    checkStockCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                    stockDisponibile = (int)await checkStockCommand.ExecuteScalarAsync();
+                }
+
+                // Se lo stock è insufficiente, aggiungi l'errore in ViewData
+                if (stockDisponibile < quantita)
+                {
+                    TempData["ErrorMessage"] = "Non ci sono abbastanza pezzi disponibili per questo prodotto.";
+                    return RedirectToAction("Details", new { id = idProdotto });
+                }
+
+                // Verifica se il prodotto è già nel carrello
                 string checkQuery = "SELECT COUNT(*) FROM Carrello WHERE IdProdotto = @IdProdotto";
                 await using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
+                    checkCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
                     int count = (int)await checkCommand.ExecuteScalarAsync();
 
                     if (count > 0)
@@ -113,6 +140,7 @@ namespace BuildWeek4.Controllers
                         await using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
                         {
                             updateCommand.Parameters.AddWithValue("@Quantita", quantita);
+                            updateCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
                             await updateCommand.ExecuteNonQueryAsync();
                         }
                     }
@@ -130,9 +158,8 @@ namespace BuildWeek4.Controllers
                 }
             }
 
-            return RedirectToAction("VisualizzaCarrello");
+            return RedirectToAction("VisualizzaCarrello", "Cart");
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -140,6 +167,6 @@ namespace BuildWeek4.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
-
 }
+
 

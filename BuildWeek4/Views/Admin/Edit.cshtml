@@ -40,6 +40,11 @@
                     }
                 </select>
             </div>
+            <div>
+                <label for="Quantita" asp-for="Quantita" class="form-label">Quantità</label>
+                <input id="Quantita" asp-for="Quantita" type="number" class="form-control"></input>
+                <span class="text-danger" asp-validation-for="Quantita"></span>
+            </div>
             <button class="btn btn-success mt-3">Conferma</button>
             <button type="reset" class="btn btn-danger mt-3">Reset dei campi</button>
         </form>

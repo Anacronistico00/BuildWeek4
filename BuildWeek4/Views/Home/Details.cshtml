@@ -3,6 +3,13 @@
     ViewData["Title"] = "Dettagli";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="container">
     <h3 class="text-center">Dettagli Carta</h3>
     <div class="container">
@@ -17,8 +24,16 @@
                         <p>€ @Model.Prezzo.ToString("C") </p>
                     </div>
                     <p>@Model.Descrizione</p>
+                    @if (Model.OutOfStock)
+                    {
+                        <p class="text-end" style="color: red; font-weight: bold;">Out of Stock</p>
+                    } 
+                    else
+                    {
+                        <p class="text-end">Disponibilità: @Model.Quantita pezzi</p>
+                    }
                     <div class="d-flex justify-content-end">
-                        <form asp-controller="Cart" asp-action="AggiungiAlCarrello" method="post">
+                        <form asp-controller="Home" asp-action="AggiungiAlCarrello" method="post">
                             <input type="hidden" name="idProdotto" value="@Model.IdProdotto" />
                             <label for="quantita">Quantità:</label>
                             <input type="number" name="quantita" id="quantita" min="1" value="1" required class="form-control" />

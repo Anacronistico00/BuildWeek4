@@ -27,6 +27,11 @@ namespace BuildWeek4.Models
         public string? Descrizione { get; set; }
 
         public Guid IdCategoria { get; set; }
+
+        [Display(Name = "Quantita")]
+        [Required(ErrorMessage = "Inserisci una quantità")]
+        [Range(0, 100, ErrorMessage = "La quantità deve essere compresa tra 1 e 100")]
+        public int Quantita { get; set; }
         public List<Categoria>? Categorie { get; set; }
     }
 }

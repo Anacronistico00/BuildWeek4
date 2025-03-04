@@ -10,5 +10,7 @@
         public string? Descrizione { get; set; }
 
         public string? Categoria { get; set; }
+        public int Quantita { get; set; }
+        public bool OutOfStock { get; set; }
     }
 }
