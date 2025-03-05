@@ -98,11 +98,11 @@ namespace BuildWeek4.Controllers
                 return RedirectToAction("AddProduct");
             }
 
-            await using (SqlConnection connection =  new SqlConnection(_connectionString))
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 var query = "INSERT INTO Prodotti (IdProdotto, URLImmagine, Prezzo, Dettaglio, Descrizione, IdCategoria, Stock) VALUES (@IdProdotto, @URLImmagine, @Prezzo, @Dettaglio, @Descrizione, @IdCategoria, @Quantita)";
-                
+
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@IdProdotto", Guid.NewGuid());
@@ -117,6 +117,28 @@ namespace BuildWeek4.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSelected(List<Guid> selectedIds)
+        {
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                foreach (var id in selectedIds)
+                {
+                    string query = "DELETE FROM Prodotti WHERE IdProdotto = @IdProdotto";
+
+                    await using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@IdProdotto", id);
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
 
         [HttpGet("home/edit/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)

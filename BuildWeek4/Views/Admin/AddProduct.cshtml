@@ -2,9 +2,9 @@
 @{
     ViewData["Title"] = "Aggiungi Prodotto";
 }
-<div class="container">
+<div class="container form-cont">
 
-<h3>Aggiungi un nuovo prodotto</h3>
+    <h3>Aggiungi un nuovo prodotto</h3>
 
     <div>
         <form asp-controller="Admin" asp-action="Create" method="post">
@@ -25,12 +25,14 @@
             </div>
             <div>
                 <label for="Prezzo" asp-for="Prezzo" class="form-label">Prezzo</label>
-                <input id="Prezzo" asp-for="Prezzo" type="number" step="0.01" min="0.01" max="10000" class="form-control" lang="it">
+                <input id="Prezzo" asp-for="Prezzo" type="number" step="0.01" min="0.01" max="10000"
+                    class="form-control" lang="it">
                 <span class="text-danger" asp-validation-for="Prezzo"></span>
             </div>
             <div>
                 <label for="IdCategoria" asp-for="IdCategoria" class="form-label">Categoria</label>
-                <select class="form-control" asp-for="IdCategoria" asp-items="@(new SelectList(Model.Categorie, "IdCategoria", "NomeCategoria"))">
+                <select class="form-control" asp-for="IdCategoria"
+                    asp-items="@(new SelectList(Model.Categorie, "IdCategoria", "NomeCategoria"))">
                     <option value="">--- Seleziona una categoria ---</option>
                 </select>
                 <span class="text-danger" asp-validation-for="IdCategoria"></span>
