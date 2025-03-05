@@ -2,99 +2,111 @@
 @{
     ViewData["Title"] = "Carrello";
 }
+<div class="BgDiv">
 
-<div class="cartDiv BgDiv">
-    <div class="container">
-        <h3 class="text-center pt-2">Carrello</h3>
-        @if (TempData["AcquistoCompletato"] != null)
-        {
-            <div class="alert alert-success" role="alert">
-                @TempData["AcquistoCompletato"]
-            </div>
-        }
-        @if (TempData["ErroreCarrello"] != null)
-        {
-            <div class="alert alert-danger" role="alert">
-                @TempData["ErroreCarrello"]
-            </div>
-        }
+<div class="cartDiv container py-4">
+    <h3 class="text-center mb-4 fw-bold text-uppercase">🛒 Il tuo Carrello</h3>
 
-        @if (Model.Any())
-        {
-            <table class="table mt-0">
+    @if (TempData["AcquistoCompletato"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">
+            @TempData["AcquistoCompletato"]
+        </div>
+    }
+    @if (TempData["ErroreCarrello"] != null)
+    {
+        <div class="alert alert-danger text-center" role="alert">
+            @TempData["ErroreCarrello"]
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table cartTable table-hover text-center align-middle shadow-sm">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Nome</th>
-                        <th>Prezzo Unitario</th>
-                        <th>Quantità</th>
-                        <th>Totale</th>
+                        <th class="text-white">Prodotto</th>
+                        <th class="text-white">Prezzo Unitario</th>
+                        <th class="text-white">Quantità</th>
+                        <th class="text-white">Totale</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        <tr class="border-bottom">
                             <td>
                                 <form asp-action="RimuoviDalCarrello" method="post" onsubmit="return confermaEliminazione()">
                                     <input type="hidden" name="idProdotto" value="@item.IdProdotto" />
-                                    <button type="submit" class="btn">.
-                                        <i class="bi bi-trash-fill text-danger"></i>
+                                    <button type="submit" class="btn text-danger" title="Rimuovi">
+                                        <i class="bi bi-trash-fill fs-5"></i>
                                     </button>
                                 </form>
                             </td>
-                            <td>@item.Dettaglio</td>
-                            <td>@item.Prezzo.ToString("C")</td>
+                            <td class="fw-semibold">@item.Dettaglio</td>
+                            <td class="text-success fw-bold">@item.Prezzo.ToString("C")</td>
                             <td>@item.Quantita</td>
-                            <td>@(item.Prezzo * item.Quantita)</td>
+                            <td class="fw-bold text-primary">@(item.Prezzo * item.Quantita)</td>
                         </tr>
                     }
                 </tbody>
             </table>
+        </div>
 
-            <h3 class="text-end">Totale: @Model.Sum(item => item.Prezzo * item.Quantita).ToString("C")</h3>
+        <h3 class="text-end fw-bold text-uppercase mt-3">Totale: <span class="text-success">@Model.Sum(item => item.Prezzo * item.Quantita).ToString("C")</span></h3>
 
-            <form asp-action="SvuotaCarrello" method="post" class="text-end mt-3" onsubmit="return confermaSvuotamento()">
-                <button type="submit" class="btn btn-danger">Svuota Carrello</button>
+        <div class="d-flex justify-content-end gap-3 mt-3">
+            <form asp-action="SvuotaCarrello" method="post" onsubmit="return confermaSvuotamento()">
+                <button type="submit" class="btn btn-danger btnSvuota px-4 py-2 fw-bold">
+                    <i class="bi bi-trash"></i> Svuota Carrello
+                </button>
             </form>
 
-            <form asp-action="Acquista" method="post" class="text-end mt-3">
-                <button type="submit" class="btn btn-success">Acquista</button>
+            <form asp-action="Acquista" method="post">
+                <button type="submit" class="btn btn-success btnCompra px-4 py-2 fw-bold">
+                    <i class="bi bi-cart-check"></i> Acquista Ora
+                </button>
             </form>
-        }
-        else
-        {
-            <p>Il carrello è vuoto.</p>
-        }
-    </div>
-
-    <div class="container borderDiv mt-2">
-        <h3 class="mt-2">In base alle tue ricerche</h3>
-        @if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
-        {
-            <div class="container justify-content-center">
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly align-items-center border-top border-dark pt-3 px-5">
-                    @for (var i = 0; i < 12; i++)
-                    {
-                        var product = ViewBag.ProductsList[i];
-                        <div class="text-center card border-0 p-2">
-                            <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
-                                <img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio">
-                            </a>
-                            <div class="card-body">
-                                <h6 class="card-title">@product.Dettaglio</h6>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center my-4">
+            <p class="fs-5 text-muted">Il carrello è vuoto. 😞</p>
+        </div>
+    }
 </div>
 
+<!-- Prodotti consigliati -->
+@if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
+{
+    <div class="container mt-3 consigliati">
+        <h3 class="text-center mb-4 text-uppercase">🔥 Potrebbero piacerti</h3>
 
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-3 justify-content-center">
+            @for (var i = 0; i < Math.Min(12, ViewBag.ProductsList.Count); i++)
+            {
+                var product = ViewBag.ProductsList[i];
+                 <div class="col">
+                        <div class="card border-0 shadow-sm rounded p-2 d-flex justify-content-center align-items-center">
+                            <div class="text-center img-container">
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
+                                    <img src="@product.URLImmagine" class="card-img-top img-fluid product-img" alt="@product.Dettaglio">
+                                </a>
+                            </div>
+                            <div class="card-body text-center">
+                                <h6 class="card-title fw-bold">@product.Dettaglio</h6>
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div>
+    </div>
+}
 
-
+</div>
 <script>
     function confermaSvuotamento() {
         return confirm("Sei sicuro di voler svuotare il carrello?");
@@ -104,3 +116,5 @@
         return confirm("Sei sicuro di voler rimuovere questo prodotto?");
     }
 </script>
+
+

@@ -5,27 +5,27 @@
 }
 
 <div class="text-center BgDiv">
-    <div>
-        <div id="carouselExample" class="carousel slide">
+    <div class="carousel-container">
+        <div id="carouselExample" class="carousel slide shadow-sm rounded">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="/imgs/1.png" class="d-block w-100" alt="...">
+                    <img src="/imgs/1.png" class="d-block w-100 rounded" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="/imgs/2.png" alt="Alternate Text" class="d-block w-100" />
+                    <img src="/imgs/2.png" alt="Alternate Text" class="d-block w-100 rounded" />
                 </div>
                 <div class="carousel-item">
-                    <img src="/imgs/6.png" class="d-block w-100" alt="...">
+                    <img src="/imgs/6.png" class="d-block w-100 rounded" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="/imgs/3.png" class="d-block w-100" alt="...">
+                    <img src="/imgs/3.png" class="d-block w-100 rounded" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="/imgs/4.png" class="d-block w-100" alt="...">
+                    <img src="/imgs/4.png" class="d-block w-100 rounded" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="/imgs/5.png" class="d-block w-100" alt="...">
-                </div>                
+                    <img src="/imgs/5.png" class="d-block w-100 rounded" alt="...">
+                </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -37,28 +37,40 @@
             </button>
         </div>
     </div>
+
+    <div class="container search-container mt-3">
+        <form method="get" action="/Home/Ricerca" class="d-flex justify-content-center">
+            <div class="input-group search-bar">
+                <input type="text" class="form-control" placeholder="Cerca su Cardmarket..." name="query" aria-label="Cerca">
+                <button class="btn btn-search" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
-<div class="BgDiv pt-2">
+<div class="BgDiv pt-4">
     @if (Model.Products != null && Model.Products.Count > 0)
     {
-        <div class="container justify-content-center">
-        <div class="container">
-            <h1 class="display-4 text-center">Di tendenza</h1>
-        </div>
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 justify-content-evenly align-items-center border-top border-dark pt-3">
+        <div class="container pb-3">
+            <h1 class="display-5 text-center text-white fw-bold mb-3">🔥 Di tendenza</h1>
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center">
                 @foreach (var product in Model.Products)
                 {
-                    <div class="text-center card border-0 m-1 p-3">
-                        <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto"><img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio"></a>
-                        <div class="card-body">
-                            <h5 class="card-title">@product.Dettaglio</h5>
+                    <div class="col">
+                        <div class="card product-card border-0 shadow-sm rounded p-2 text-center">
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
+                                <img src="@product.URLImmagine" class="card-img-top product-img" alt="@product.Dettaglio">
+                            </a>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">@product.Dettaglio</h6>
+                            </div>
                         </div>
                     </div>
                 }
             </div>
         </div>
     }
-
 </div>
 
