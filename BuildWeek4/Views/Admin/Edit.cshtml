@@ -1,16 +1,16 @@
 ﻿@model EditProduct
 
-@{   
+@{
     ViewData["Title"] = "Modifica Prodotto";
     var categories = ViewBag.Categoria as List<Categoria>;
 }
-<div class="container">
+<div class="container form-cont">
 
     <h3>Modifica prodotto</h3>
 
     <div>
         <form method="post" asp-controller="Admin" asp-action="SaveEdit" asp-route-id="@Model.IdProdotto">
-            <input hidden asp-for="IdProdotto"/>
+            <input hidden asp-for="IdProdotto" />
             <div>
                 <label for="Dettagli" asp-for="Dettaglio" class="form-label">Dettaglio</label>
                 <input id="Dettagli" asp-for="Dettaglio" class="form-control" />
@@ -28,7 +28,8 @@
             </div>
             <div>
                 <label for="Prezzo" asp-for="Prezzo" class="form-label">Prezzo</label>
-                <input id="Prezzo" asp-for="Prezzo" type="number" step="0.01" min="0.01" max="10000" class="form-control" lang="it">
+                <input id="Prezzo" asp-for="Prezzo" type="number" step="0.01" min="0.01" max="10000"
+                    class="form-control" lang="it">
                 <span class="text-danger" asp-validation-for="Prezzo"></span>
             </div>
             <div>

@@ -324,3 +324,133 @@ input[type="checkbox"]:hover {
     background-color: #D0E8F9;
     border-color: #3683b4;
 }
+
+
+
+/*---------FORM--------------*/
+
+.form-cont {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-cont h3 {
+    color: #364150;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
+
+.form-cont .form-label {
+    font-size: 1rem;
+    color: #5a6a75;
+    margin-bottom: 0.5rem;
+    display: block;
+    margin-top: 1rem;
+}
+
+.form-cont input[type="text"],
+.form-cont input[type="number"],
+.form-cont textarea,
+.form-cont select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #d1d9e6;
+    border-radius: 0;
+    background-color: transparent;
+    color: #5a6a75;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-cont input[type="text"]:focus,
+.form-cont input[type="number"]:focus,
+.form-cont textarea:focus,
+.form-cont select:focus {
+    outline: none;
+    border-bottom: 2px solid #3f94d1;
+    box-shadow: 0 1px 5px rgba(63, 148, 209, 0.3);
+}
+
+.form-cont textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.form-cont button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3f94d1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-cont button:hover {
+    background-color: #3683b4;
+    transform: translateY(-2px);
+}
+
+.form-cont button:active {
+    transform: translateY(0);
+}
+
+.form-cont button[type="reset"] {
+    background-color: #f44336;
+    margin-top: 10px;
+}
+
+.form-cont button[type="reset"]:hover {
+    background-color: #d32f2f;
+}
+
+.form-cont .text-danger {
+    font-size: 0.875rem;
+    color: #f44336;
+    margin-top: 5px;
+}
+
+.form-cont select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 30px;
+    background-color: transparent;
+    background-size: 12px;
+}
+
+.form-cont .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .form-cont .container {
+        padding: 20px 10px;
+    }
+
+    .form-cont h3 {
+        font-size: 1.5rem;
+    }
+
+    .form-cont button {
+        font-size: 1rem;
+    }
+
+    .form-cont input[type="text"],
+    .form-cont input[type="number"],
+    .form-cont textarea,
+    .form-cont select {
+        font-size: 0.9rem;
+    }
+}
