@@ -5,7 +5,8 @@
     var categoria = ViewBag.Categoria as string;
 }
 
-<div class="container mt-4">
+<div class="BgDiv">
+<div class="container mt-4 search-container">
     @if (!string.IsNullOrEmpty(categoria))
     {
         <h1 class="mb-4">Carte di @categoria</h1>
@@ -20,27 +21,54 @@
         <div class="alert alert-warning">
             Nessun prodotto trovato.
         </div>
-        <a href="/" class="btn btn-primary mt-3">Torna alla Home</a>
+        <a href="/" class="btn btn-primary-home">Torna alla Home</a>
     }
     else
     {
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="product-grid">
             @foreach (var prodotto in Model.Products)
             {
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="@prodotto.URLImmagine" class="card-img-top" alt="@prodotto.Dettaglio">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@prodotto.Dettaglio</h5>
-                            <p class="card-text">@prodotto.Descrizione</p>
-                            <p class="card-text fw-bold">@prodotto.Prezzo €</p>
-                            <a href="/Home/Details/@prodotto.IdProdotto" class="btn btn-outline-primary mt-auto">
-                                Vai al prodotto
-                            </a>
-                        </div>
+                <div class="card-product">
+                    <img src="@prodotto.URLImmagine" class="card-img-top" alt="@prodotto.Dettaglio">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@prodotto.Dettaglio</h5>
+                        <p class="card-text">@prodotto.Descrizione</p>
+                        <p class="card-text fw-bold">@prodotto.Prezzo €</p>
+                        <a href="/Home/Details/@prodotto.IdProdotto" class="btn btn-outline-primary mt-auto">
+                            Vai al prodotto
+                        </a>
                     </div>
                 </div>
             }
         </div>
     }
+
+    <!-- Prodotti consigliati -->
+    @if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
+    {
+        <div class="container mt-3 consigliati roundedDiv">
+            <h3 class="text-center mb-4 text-uppercase">🔥 Potrebbero piacerti</h3>
+
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-3 justify-content-center">
+                @for (var i = 0; i < Math.Min(12, ViewBag.ProductsList.Count); i++)
+                {
+                    var product = ViewBag.ProductsList[i];
+                    <div class="col">
+                        <div class="card border-0 shadow-sm rounded p-2 d-flex justify-content-center align-items-center">
+                            <div class="text-center img-container">
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
+                                    <img src="@product.URLImmagine" class="card-img-top img-fluid product-img" alt="@product.Dettaglio">
+                                </a>
+                            </div>
+                            <div class="card-body text-center">
+                                <h6 class="card-title fw-bold">@product.Dettaglio</h6>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+</div>
 </div>

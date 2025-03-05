@@ -28,6 +28,10 @@ html, body {
 .Logo {
     width: 200px;
 }
+.detailsImg,
+.card-img-top{
+    transition: transform 0.3s ease;
+}
 
 .card-img-top:hover,
 .detailsImg:hover {
@@ -50,17 +54,21 @@ html, body {
 
 .navbar-nav .nav-link {
     color: #022169 !important;
+    transition: transform 0.3s ease;
 }
 
 .navbar-nav .nav-link i {
     color: #022169 !important;
 }
 
-.search-container {
-    border-radius: 0 10px 10px 0;
-    padding: 2px;
+.nav-link:hover {
+    transform: scale(1.1);
 }
 
+.search-container {
+    border-radius: 10px;
+    padding: 2px;
+}
 
 .search-container .form-control {
     background-color: #ffffff;
@@ -138,8 +146,12 @@ footer {
     line-height: 0 !important;
 }
 
+.dropImg {
+    transition: transform 0.3s ease;
+}
+
 .dropImg:hover {
-    transform: scale(1.02);
+    transform: scale(1.1);
     background-color: lightgray;
     border-left: 8px solid #022169;
 }
@@ -159,7 +171,78 @@ footer {
 }
 
 .detailsCard {
-    border-top: 10px solid #022169;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+    .detailsCard h1 {
+        font-size: 2rem;
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .detailsCard img.detailsImg {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .detailsCard img.detailsImg:hover {
+            transform: scale(1.05);
+        }
+
+    .detailsCard .description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .detailsCard .price {
+        font-size: 1.5rem;
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .detailsCard .availability p {
+        font-size: 1rem;
+        color: #888;
+    }
+
+    .detailsCard .form-control {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    .detailsCard .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .detailsCard .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+.modal-body img {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.roundedDiv {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .BgDiv {
@@ -202,6 +285,7 @@ footer {
     max-width: 100%;
     max-height: 200px;
     object-fit: contain;
+
 }
 
 .card-title {
@@ -257,9 +341,6 @@ td {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 15px;
-}
-
-    width: 8% !important;
 }
 
 .submit-selected {
@@ -347,7 +428,7 @@ tbody tr:hover {
 }
 
 .img-hover-zoom:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
     cursor: pointer;
 }
 
@@ -511,10 +592,6 @@ input[type="checkbox"]:hover {
         font-size: 0.9rem;
     }
 }
-.img-hover-zoom:hover {
-    transform: scale(1.2);
-    cursor: pointer;
-}
 
 .img-container {
     width: 150px;
@@ -564,4 +641,118 @@ input[type="checkbox"]:hover {
 
     .btnSvuota:hover, .btnCompra:hover {
         transform: scale(1.05);
+    }
+
+/* Container principale */
+.search-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    /* Titolo della sezione */
+    .search-container h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+/* Messaggio di avviso quando non ci sono prodotti */
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* Layout per la griglia di prodotti */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Card del prodotto */
+.card-product {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card-product:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Immagine del prodotto */
+    .card-product img {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+
+        .card-product img:hover {
+            transform: scale(1.05);
+        }
+
+/* Corpo della card */
+.card-body {
+    padding: 20px;
+    background-color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+    .card-text.fw-bold {
+        font-weight: bold;
+        color: #28a745;
+    }
+
+/* Bottone del prodotto */
+.btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+    background-color: transparent;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+/* Bottone "Torna alla Home" */
+.btn-primary-home {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 20px;
+    display: block;
+}
+
+    .btn-primary-home:hover {
+        background-color: #0056b3;
     }

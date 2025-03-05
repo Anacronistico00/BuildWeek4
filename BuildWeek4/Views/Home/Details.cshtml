@@ -73,10 +73,10 @@
                 <div class="col col-12 col-md-9 mt-5 mt-lg-0">
                     <div class="d-flex flex-column">
                         <div>
-                            <p>@Model.Descrizione</p>
-                            <p class="text-end fw-bolder fs-4">€ @Model.Prezzo.ToString("C") </p>
+                            <p class="description">@Model.Descrizione</p>
+                            <p class="price text-end fw-bolder fs-4">€ @Model.Prezzo.ToString("C") </p>
                         </div>
-                        <div class="d-flex justify-content-end">
+                        <div class="availability d-flex justify-content-end">
                             <form asp-controller="Home" asp-action="AggiungiAlCarrello" method="post" class="d-flex d-lg-block">
                                 <div>
                                     <input type="hidden" name="idProdotto" value="@Model.IdProdotto" />
@@ -96,7 +96,7 @@
                                     {
                                         <p class="text-end m-0">Disponibilità: @Model.Quantita pezzi</p>
                                     }
-                                    <button type="submit" class="btn btn-primary mt-2">Aggiungi al Carrello</button>
+                                    <button type="submit" class="btn btn-primary mt-2 ms-1 py-0 rounded-3">Aggiungi al Carrello</button>
                                 </div>
                             </form>
                         </div>
@@ -116,7 +116,8 @@
         </div>
     </div>
 
-    <div class="container borderDiv mt-2">
+
+    <div class="container borderDiv mt-2 roundedDiv">
         <h3 class="mt-2">Potrebbe interessarti</h3>
         @if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
         {

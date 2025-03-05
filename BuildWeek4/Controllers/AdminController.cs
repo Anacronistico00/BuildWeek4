@@ -127,7 +127,8 @@ namespace BuildWeek4.Controllers
 
                 foreach (var id in selectedIds)
                 {
-                    string query = "DELETE FROM Prodotti WHERE IdProdotto = @IdProdotto";
+                    string query = "DELETE FROM Carrello WHERE IdProdotto = @IdProdotto;" +
+                        "DELETE FROM Prodotti WHERE IdProdotto = @IdProdotto";
 
                     await using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -201,7 +202,8 @@ namespace BuildWeek4.Controllers
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "DELETE FROM Prodotti WHERE IdProdotto = @IdProdotto";
+                string query = "DELETE FROM Carrello WHERE IdProdotto = @IdProdotto;" +
+                    "DELETE FROM Prodotti WHERE IdProdotto = @IdProdotto";
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@IdProdotto", id);
