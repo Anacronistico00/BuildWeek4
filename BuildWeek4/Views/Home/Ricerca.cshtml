@@ -1,0 +1,46 @@
+﻿@model ProductViewModel
+
+@{
+    ViewData["Title"] = "Risultati della ricerca";
+    var categoria = ViewBag.Categoria as string;
+}
+
+<div class="container mt-4">
+    @if (!string.IsNullOrEmpty(categoria))
+    {
+        <h1 class="mb-4">Carte di @categoria</h1>
+    }
+    else
+    {
+        <h1 class="mb-4">Risultati della ricerca</h1>
+    }
+
+    @if (!Model.Products.Any())
+    {
+        <div class="alert alert-warning">
+            Nessun prodotto trovato.
+        </div>
+        <a href="/" class="btn btn-primary mt-3">Torna alla Home</a>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var prodotto in Model.Products)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="@prodotto.URLImmagine" class="card-img-top" alt="@prodotto.Dettaglio">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@prodotto.Dettaglio</h5>
+                            <p class="card-text">@prodotto.Descrizione</p>
+                            <p class="card-text fw-bold">@prodotto.Prezzo €</p>
+                            <a href="/Home/Details/@prodotto.IdProdotto" class="btn btn-outline-primary mt-auto">
+                                Vai al prodotto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

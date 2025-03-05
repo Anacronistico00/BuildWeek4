@@ -2,67 +2,96 @@
 @{
     ViewData["Title"] = "Carrello";
 }
-<div class="container">
-    <h3 class="text-center">Carrello</h3>
-    @if (TempData["AcquistoCompletato"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            @TempData["AcquistoCompletato"]
-        </div>
-    }
-    @if (TempData["ErroreCarrello"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @TempData["ErroreCarrello"]
-        </div>
-    }
 
-    @if (Model.Any())
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Prezzo Unitario</th>
-                    <th>Quantità</th>
-                    <th>Totale</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<div class="cartDiv BgDiv">
+    <div class="container">
+        <h3 class="text-center pt-2">Carrello</h3>
+        @if (TempData["AcquistoCompletato"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["AcquistoCompletato"]
+            </div>
+        }
+        @if (TempData["ErroreCarrello"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErroreCarrello"]
+            </div>
+        }
+
+        @if (Model.Any())
+        {
+            <table class="table mt-0">
+                <thead>
                     <tr>
-                        <td>@item.Dettaglio</td>
-                        <td>@item.Prezzo.ToString("C")</td>
-                        <td>@item.Quantita</td>
-                        <td>@(item.Prezzo * item.Quantita)</td>
-                        <td>
-                            <form asp-action="RimuoviDalCarrello" method="post" onsubmit="return confermaEliminazione()">
-                                <input type="hidden" name="idProdotto" value="@item.IdProdotto" />
-                                <button type="submit" class="btn btn-sm btn-danger">❌</button>
-                            </form>
-                        </td>
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Prezzo Unitario</th>
+                        <th>Quantità</th>
+                        <th>Totale</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <form asp-action="RimuoviDalCarrello" method="post" onsubmit="return confermaEliminazione()">
+                                    <input type="hidden" name="idProdotto" value="@item.IdProdotto" />
+                                    <button type="submit" class="btn">.
+                                        <i class="bi bi-trash-fill text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>@item.Dettaglio</td>
+                            <td>@item.Prezzo.ToString("C")</td>
+                            <td>@item.Quantita</td>
+                            <td>@(item.Prezzo * item.Quantita)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-        <h3 class="text-end">Totale: @Model.Sum(item => item.Prezzo * item.Quantita).ToString("C")</h3>
+            <h3 class="text-end">Totale: @Model.Sum(item => item.Prezzo * item.Quantita).ToString("C")</h3>
 
-        <form asp-action="SvuotaCarrello" method="post" class="text-end mt-3" onsubmit="return confermaSvuotamento()">
-            <button type="submit" class="btn btn-danger">Svuota Carrello</button>
-        </form>
+            <form asp-action="SvuotaCarrello" method="post" class="text-end mt-3" onsubmit="return confermaSvuotamento()">
+                <button type="submit" class="btn btn-danger">Svuota Carrello</button>
+            </form>
 
-        <form asp-action="Acquista" method="post" class="text-end mt-3">
-            <button type="submit" class="btn btn-success">Acquista</button>
-        </form>
-    }
-    else
-    {
-        <p>Il carrello è vuoto.</p>
-    }
+            <form asp-action="Acquista" method="post" class="text-end mt-3">
+                <button type="submit" class="btn btn-success">Acquista</button>
+            </form>
+        }
+        else
+        {
+            <p>Il carrello è vuoto.</p>
+        }
+    </div>
+
+    <div class="container borderDiv mt-2">
+        <h3 class="mt-2">In base alle tue ricerche</h3>
+        @if (ViewBag.ProductsList != null && ViewBag.ProductsList.Count > 0)
+        {
+            <div class="container justify-content-center">
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 justify-content-evenly align-items-center border-top border-dark pt-3 px-5">
+                    @for (var i = 0; i < 12; i++)
+                    {
+                        var product = ViewBag.ProductsList[i];
+                        <div class="text-center card border-0 p-2">
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@product.IdProdotto">
+                                <img src="@product.URLImmagine" class="card-img-top" alt="@product.Dettaglio">
+                            </a>
+                            <div class="card-body">
+                                <h6 class="card-title">@product.Dettaglio</h6>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
 
 
 

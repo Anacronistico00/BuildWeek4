@@ -41,6 +41,36 @@ namespace BuildWeek4.Controllers
                         }
                     }
                 }
+
+                var productList = new ProductViewModel()
+                {
+                    Products = new List<Product>()
+                };
+
+                await using (SqlCommand command = new SqlCommand("SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, Categorie.NomeCategoria, " +
+                    "Prodotti.URLImmagine, Prodotti.Prezzo FROM Prodotti " +
+                    "INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria", connection))
+                {
+                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            productList.Products.Add(
+                                new Product()
+                                {
+                                    IdProdotto = reader.GetGuid(0),
+                                    Dettaglio = reader.GetString(1),
+                                    Descrizione = reader.GetString(2),
+                                    Categoria = reader.GetString(3),
+                                    URLImmagine = reader.GetString(4),
+                                    Prezzo = reader.GetDecimal(5)
+                                });
+                        }
+                    }
+
+                    // Assegna la lista dei prodotti a ViewBag
+                    ViewBag.ProductsList = productList.Products;
+                }
             }
 
             return View(carrello);

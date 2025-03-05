@@ -186,6 +186,100 @@ namespace BuildWeek4.Controllers
             return RedirectToAction("Details", new {id = idProdotto});
         }
 
+        public async Task<IActionResult> Ricerca(string query)
+        {
+            var risultati = new ProductViewModel()
+            {
+                Products = new List<Product>()
+            };
+
+            if (string.IsNullOrEmpty(query))
+            {
+                return View(risultati); // Nessun risultato se la query è vuota
+            }
+
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string sqlQuery = @"SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, 
+                            Categorie.NomeCategoria, Prodotti.URLImmagine, Prodotti.Prezzo 
+                            FROM Prodotti 
+                            INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria
+                            WHERE Prodotti.Dettaglio LIKE @Query OR Prodotti.Descrizione LIKE @Query";
+
+                await using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Query", "%" + query + "%");
+
+                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            risultati.Products.Add(new Product()
+                            {
+                                IdProdotto = reader.GetGuid(0),
+                                Dettaglio = reader.GetString(1),
+                                Descrizione = reader.GetString(2),
+                                Categoria = reader.GetString(3),
+                                URLImmagine = reader.GetString(4),
+                                Prezzo = reader.GetDecimal(5)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return View(risultati);
+        }
+
+        //ricerca quando si preme l'immagine
+        public async Task<IActionResult> FiltraPerCategoria(string categoria)
+        {
+            var risultati = new ProductViewModel()
+            {
+                Products = new List<Product>()
+            };
+
+            if (string.IsNullOrEmpty(categoria))
+            {
+                return RedirectToAction("Index"); // Se la categoria è vuota, torno alla home
+            }
+
+            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string sqlQuery = @"SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, 
+                    Categorie.NomeCategoria, Prodotti.URLImmagine, Prodotti.Prezzo 
+                    FROM Prodotti 
+                    INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria
+                    WHERE Categorie.NomeCategoria = @Categoria";
+
+                await using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Categoria", categoria);
+
+                    await using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            risultati.Products.Add(new Product()
+                            {
+                                IdProdotto = reader.GetGuid(0),
+                                Dettaglio = reader.GetString(1),
+                                Descrizione = reader.GetString(2),
+                                Categoria = reader.GetString(3),
+                                URLImmagine = reader.GetString(4),
+                                Prezzo = reader.GetDecimal(5)
+                            });
+                        }
+                    }
+                }
+            }
+
+            ViewBag.Categoria = categoria;
+            return View("Ricerca", risultati);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

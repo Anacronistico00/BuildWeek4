@@ -54,33 +54,33 @@ html {
 }
 
 
-    .search-container .form-control {
-        background-color: #ffffff;
-        color: #000000;
-        border: none;
-        border-radius: 4px;
-        padding: 10px;
-        font-size: 1rem;
-    }
+.search-container .form-control {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 1rem;
+}
 
-        .search-container .form-control::placeholder {
-            color: #6c757d;
-        }
+search-container .form-control::placeholder {
+    color: #6c757d;
+}
 
-    .search-container .btn {
-        background-color: #ffffff;
-        color: #022169;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 4px;
-    }
+.search-container .btn {
+    background-color: #ffffff;
+    color: #022169;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+}
 
-    .search-container .form-control:focus {
-        box-shadow: none;
-        outline: none;
-        border-color: transparent;
-        transform: none;
-    }
+.search-container .form-control:focus {
+    box-shadow: none;
+    outline: none;
+    border-color: transparent;
+    transform: none;
+}
 
 .input-group .vr {
     margin: 0 1px;
@@ -92,9 +92,9 @@ html {
     color: #022169;
 }
 
-    .footer-custom a {
-        color: #022169;
-    }
+.footer-custom a {
+    color: #022169;
+}
 
 footer {
     border-top: 10px solid #022169;
@@ -130,9 +130,9 @@ footer {
     background-color: #022169;
 }
 
-    .BgDiv > div {
-        background-color: white
-    }
+.BgDiv > div {
+    background-color: white
+}
 
 /*-------------TABELLA--------------*/
 th {
