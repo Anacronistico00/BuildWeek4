@@ -21,15 +21,17 @@ html {
     min-height: 100%;
 }
 
-html, body {
+html,
+body {
     font-family: "Ubuntu", sans-serif !important;
 }
 
 .Logo {
     width: 200px;
 }
+
 .detailsImg,
-.card-img-top{
+.card-img-top {
     transition: transform 0.3s ease;
 }
 
@@ -184,59 +186,59 @@ footer {
     margin-bottom: 20px;
 }
 
-    .detailsCard h1 {
-        font-size: 2rem;
-        color: #333;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
+.detailsCard h1 {
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    .detailsCard img.detailsImg {
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
-    }
+.detailsCard img.detailsImg {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
 
-        .detailsCard img.detailsImg:hover {
-            transform: scale(1.05);
-        }
+.detailsCard img.detailsImg:hover {
+    transform: scale(1.05);
+}
 
-    .detailsCard .description {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        color: #555;
-        margin-bottom: 20px;
-    }
+.detailsCard .description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+}
 
-    .detailsCard .price {
-        font-size: 1.5rem;
-        color: #28a745;
-        font-weight: bold;
-    }
+.detailsCard .price {
+    font-size: 1.5rem;
+    color: #28a745;
+    font-weight: bold;
+}
 
-    .detailsCard .availability p {
-        font-size: 1rem;
-        color: #888;
-    }
+.detailsCard .availability p {
+    font-size: 1rem;
+    color: #888;
+}
 
-    .detailsCard .form-control {
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        padding: 10px;
-    }
+.detailsCard .form-control {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
 
-    .detailsCard .btn-primary {
-        background-color: #007bff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
+.detailsCard .btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
 
-        .detailsCard .btn-primary:hover {
-            background-color: #0056b3;
-        }
+.detailsCard .btn-primary:hover {
+    background-color: #0056b3;
+}
 
 .modal-body img {
     border-radius: 15px;
@@ -322,11 +324,16 @@ footer {
 }
 
 /*-------------TABELLA--------------*/
+.form-table {
+    width: 90%;
+}
+
 table {
     margin-top: 3rem;
     overflow: hidden;
     border-radius: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 th {
@@ -606,10 +613,10 @@ input[type="checkbox"]:hover {
     background-color: #f8f9fa;
 }
 
-    .img-container img {
-        max-width: 100%;
-        max-height: 100%;
-    }
+.img-container img {
+    max-width: 100%;
+    max-height: 100%;
+}
 
 .cartDiv {
     background: #fff;
@@ -624,14 +631,14 @@ input[type="checkbox"]:hover {
     overflow: hidden;
 }
 
-    .cartTable thead {
-        background: #012169;
-        color: white !important;
-    }
+.cartTable thead {
+    background: #012169;
+    color: white !important;
+}
 
-    .cartTable tbody tr:hover {
-        background: #f8f9fa;
-    }
+.cartTable tbody tr:hover {
+    background: #f8f9fa;
+}
 
 .card-title {
     white-space: nowrap;
@@ -645,9 +652,10 @@ input[type="checkbox"]:hover {
     transition: all 0.3s ease-in-out;
 }
 
-    .btnSvuota:hover, .btnCompra:hover {
-        transform: scale(1.05);
-    }
+.btnSvuota:hover,
+.btnCompra:hover {
+    transform: scale(1.05);
+}
 
 /* Container principale */
 .search-container {
@@ -657,14 +665,14 @@ input[type="checkbox"]:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-    /* Titolo della sezione */
-    .search-container h1 {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-        margin-bottom: 30px;
-    }
+/* Titolo della sezione */
+.search-container h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
 
 /* Messaggio di avviso quando non ci sono prodotti */
 .alert-warning {
@@ -692,21 +700,21 @@ input[type="checkbox"]:hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .card-product:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
+.card-product:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
 
-    /* Immagine del prodotto */
-    .card-product img {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        transition: transform 0.3s ease;
-    }
+/* Immagine del prodotto */
+.card-product img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    transition: transform 0.3s ease;
+}
 
-        .card-product img:hover {
-            transform: scale(1.05);
-        }
+.card-product img:hover {
+    transform: scale(1.05);
+}
 
 /* Corpo della card */
 .card-body {
@@ -729,10 +737,10 @@ input[type="checkbox"]:hover {
     margin-bottom: 10px;
 }
 
-    .card-text.fw-bold {
-        font-weight: bold;
-        color: #28a745;
-    }
+.card-text.fw-bold {
+    font-weight: bold;
+    color: #28a745;
+}
 
 /* Bottone del prodotto */
 .btn-outline-primary {
@@ -742,10 +750,10 @@ input[type="checkbox"]:hover {
     transition: background-color 0.3s, color 0.3s;
 }
 
-    .btn-outline-primary:hover {
-        background-color: #007bff;
-        color: #fff;
-    }
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
 
 /* Bottone "Torna alla Home" */
 .btn-primary-home {
@@ -759,6 +767,6 @@ input[type="checkbox"]:hover {
     display: block;
 }
 
-    .btn-primary-home:hover {
-        background-color: #0056b3;
-    }
+.btn-primary-home:hover {
+    background-color: #0056b3;
+}
