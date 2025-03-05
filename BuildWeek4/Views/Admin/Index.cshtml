@@ -5,46 +5,91 @@
 }
 
 <div class="BgDiv">
-    <div class="container">
+    <div class="container d-flex flex-column align-items-center">
         <h3 class="text-center pt-5">Modifica o elimina un prodotto</h3>
 
 
-        @if (Model.Products != null && Model.Products.Count > 0)
-        {
-            <table>
-                <thead>
-                    <tr>
-                        <th>IMMAGINE</th>
-                        <th>NOME</th>
-                        <th>CATEGORIA</th>
-                        <th>PREZZO</th>
-                        <th>DESCRIZIONE</th>
-                        <th>STOCK</th>
-                        <th class="d-flex justify-content-center align-items-center"><a asp-controller="Admin" asp-action="AddProduct"><i class="bi bi-plus-circle"></i></a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model.Products)
-                    {
-                        <tr>
-                            <td><img src="@product.URLImmagine" alt="@product.Dettaglio" class="w-50 img-hover-zoom" /></td>
-                            <td>@product.Dettaglio</td>
-                            <td>@product.Categoria</td>
-                            <td>@product.Prezzo.ToString("C")</td>
-                            <td>@product.Descrizione</td>
-                            <td>@product.Quantita</td>
-                            <td>
-                                <div class="icons">
-                                    <a asp-controller="Admin" asp-action="Edit" asp-route-id="@product.IdProdotto"><i
-                                            class="bi bi-pencil-fill"></i></a>
-                                    <a asp-controller="Admin" asp-action="delete" asp-route-id="@product.IdProdotto" onclick="return EliminaProdotto()">
-                                        <i class="bi bi-trash-fill text-danger"></i></a>
+        @{
+            if (Model.Products != null && Model.Products.Count > 0)
+            {
+                <form method="post" asp-action="DeleteSelected" asp-controller="Admin"
+                    class=" d-flex flex-column align-items-center form-table">
+                    <table class="mb-5 first-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center px-0">
+                                    <input type="checkbox" id="selected-all" />
+                                </th>
+                                <th>IMMAGINE</th>
+                                <th>NOME</th>
+                                <th>CATEGORIA</th>
+                                <th>PREZZO</th>
+                                <th>DESCRIZIONE</th>
+                                <th>STOCK</th>
+                                <th class="d-flex justify-content-center align-items-center"><a asp-controller="Admin"
+                                        asp-action="AddProduct"><i class="bi bi-plus-circle"></i></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.Products)
+                            {
+                                <tr>
+                                    <td class="text-center px-0">
+                                        <input type="checkbox" name="selectedIds" value="@product.IdProdotto"
+                                            class="product-checkbox" />
+                                    </td>
+                                    <td>
+                                        <img src="@product.URLImmagine" data-bs-toggle="modal" data-bs-target="#imageModal"
+                                            alt="@product.Dettaglio" class="w-100 img-hover-zoom" />
+                                    </td>
+                                    <td>@product.Dettaglio</td>
+                                    <td>@product.Categoria</td>
+                                    <td>@product.Prezzo.ToString("C")</td>
+                                    <td>@product.Descrizione</td>
+                                    <td class="text-center">@product.Quantita</td>
+                                    <td class="px-0">
+                                        <div class="icons">
+                                            <a asp-controller="Admin" asp-action="Edit" asp-route-id="@product.IdProdotto"><i
+                                                    class="bi bi-pencil-fill"></i></a>
+                                            <a asp-controller="Admin" asp-action="delete" asp-route-id="@product.IdProdotto"
+                                                onclick="return EliminaProdotto()">
+                                                <i class="bi bi-trash-fill text-danger"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body p-0">
+                                                <img id="modalImage" src="@product.URLImmagine" class="w-100" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            }
+            else
+            {
+                <table class="mb-5">
+                    <thead>
+                        <tr>
+                            <th class="d-flex justify-content-center align-items-center w-100"><a asp-controller="Admin"
+                                    asp-action="AddProduct"><i class="bi bi-plus-circle"></i></a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="d-flex flex-row justify-content-center px-0 mx-0 w-100">
+                            <td class="d-flex flwx-row justify-content-center px-0 mx-0">
+                                Lista prodotti vuota
                             </td>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            }
         }
     </div>
 </div>
@@ -52,4 +97,112 @@
 <script>
     function EliminaProdotto() {
         return confirm("Sei sicuro di voler svuotare il carrello?");
-}</script>
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        generalCheckbox()
+    });
+
+    let isAnyChecked = false;
+    document.querySelectorAll('.product-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            let checkboxes = document.querySelectorAll('.product-checkbox');
+            isAnyChecked = false;
+
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    isAnyChecked = true;
+                    break;
+                }
+            }
+            updateTableHead(isAnyChecked);
+        });
+    });
+
+    function updateTableHead(isSelected) {
+        const headerRow = document.querySelector('.first-table thead tr');
+        const headerCells = headerRow.querySelectorAll('th:nth-child(n+2)'); //mi prende tutte le celle apparte la prima
+
+        if (isSelected) {
+            headerCells.forEach((cell, index) => {
+                switch (index) {
+                    case 0:
+                        cell.innerHTML = "";
+                        break;
+                    case 1:
+                        cell.innerHTML = "";
+                        break;
+                    case 2:
+                        cell.innerHTML = "";
+                        break;
+                    case 3:
+                        cell.innerHTML = "";
+                        break;
+                    case 4:
+                        cell.innerHTML = "";
+                        break;
+                    case 5:
+                        cell.innerHTML = "";
+                        break;
+                    case 6:
+                        cell.innerHTML = '<button type="submit" class="submit-selected"><i class="bi bi-trash-fill text-danger"></i></button>';
+                        break;
+                    default:
+                        break;
+                }
+            });
+            generalCheckbox();
+        } else {
+            headerCells.forEach((cell, index) => {
+                switch (index) {
+                    case 0:
+                        cell.innerHTML = "IMMAGINE";
+                        break;
+                    case 1:
+                        cell.innerHTML = "NOME";
+                        break;
+                    case 2:
+                        cell.innerHTML = "CATEGORIA";
+                        break;
+                    case 3:
+                        cell.innerHTML = "PREZZO";
+                        break;
+                    case 4:
+                        cell.innerHTML = "DESCRIZIONE";
+                        break;
+                    case 5:
+                        cell.innerHTML = "STOCK";
+                        break;
+                    case 6:
+                        cell.innerHTML = `<a asp-controller="Admin" asp-action="AddProduct"><i class="bi bi-plus-circle"></i></a>`;
+                        break;
+                    default:
+                        break;
+                }
+            });
+            generalCheckbox();
+        }
+    }
+
+    function generalCheckbox() {
+        let checkboxAll = document.getElementById("selected-all");
+        checkboxAll.addEventListener("change", function () {
+            var checkboxes = document.querySelectorAll("input[name='selectedIds']");
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = checkboxAll.checked;
+            });
+            if (checkboxAll.checked) {
+                isAnyChecked = true;
+            } else {
+                isAnyChecked = false;
+                for (let i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        isAnyChecked = true;
+                        break;
+                    }
+                }
+            }
+            updateTableHead(isAnyChecked);
+        });
+    }
+</script>
