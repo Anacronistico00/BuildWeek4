@@ -1,7 +1,17 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Index";  // La pagina di login
+        options.LogoutPath = "/Login/Logout";  // La pagina di logout
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);  // Durata della sessione
+    });
 
 var app = builder.Build();
 

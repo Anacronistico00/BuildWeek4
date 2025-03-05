@@ -3,13 +3,6 @@
     ViewData["Title"] = "Dettagli";
 }
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @TempData["ErrorMessage"]
-    </div>
-}
-
 <div class="text-center BgDiv">
     <div>
         <div id="carouselExample" class="carousel slide">
@@ -60,6 +53,12 @@
 
 <div class="BgDiv">
     <div class="container pt-5 pb-3 detailsCard">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
         <h1>@Model.Dettaglio</h1>
         <div class="container mt-2">
             <div class="row mt-2">

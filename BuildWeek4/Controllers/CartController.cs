@@ -1,6 +1,7 @@
 ﻿using BuildWeek4.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Security.Claims;
 
 namespace BuildWeek4.Controllers
 {
@@ -18,15 +19,24 @@ namespace BuildWeek4.Controllers
         {
             List<Cart> carrello = new List<Cart>();
 
+            // Ottieni l'ID dell'utente loggato
+            Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); // Assumendo che l'ID utente sia nel claim
+
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
+                // Aggiungi il filtro per l'utente loggato nella query
                 string query = "SELECT Carrello.IdProdotto, Prodotti.Dettaglio, Prodotti.Prezzo, Carrello.Quantita " +
                                "FROM Carrello " +
-                               "INNER JOIN Prodotti ON Carrello.IdProdotto = Prodotti.IdProdotto";
+                               "INNER JOIN Prodotti ON Carrello.IdProdotto = Prodotti.IdProdotto " +
+                               "WHERE Carrello.IdUtente = @IdUtente";
 
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    // Aggiungi il parametro per l'ID utente
+                    command.Parameters.AddWithValue("@IdUtente", idUtente);
+
                     await using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
@@ -42,11 +52,13 @@ namespace BuildWeek4.Controllers
                     }
                 }
 
+                // Creazione della lista di prodotti
                 var productList = new ProductViewModel()
                 {
                     Products = new List<Product>()
                 };
 
+                // Query per recuperare tutti i prodotti
                 await using (SqlCommand command = new SqlCommand("SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, Categorie.NomeCategoria, " +
                     "Prodotti.URLImmagine, Prodotti.Prezzo FROM Prodotti " +
                     "INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria", connection))
@@ -73,8 +85,10 @@ namespace BuildWeek4.Controllers
                 }
             }
 
+            // Passa la lista del carrello alla vista
             return View(carrello);
         }
+
 
 
         // Rimuovi prodotto dal carrello

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BuildWeek4.Models;
 using Microsoft.Data.SqlClient;
+using System.Security.Claims;
 
 namespace BuildWeek4.Controllers
 {
@@ -138,6 +139,16 @@ namespace BuildWeek4.Controllers
         [HttpPost]
         public async Task<IActionResult> AggiungiAlCarrello(Guid idProdotto, int quantita)
         {
+            // Verifica se l'utente è loggato
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Se non è loggato, reindirizza alla pagina di login
+                return RedirectToAction("Index", "Login");
+            }
+
+            // Recupera l'IdUtente dal claim (utente autenticato)
+            Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); // Assumendo che l'utente sia autenticato
+
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -151,31 +162,39 @@ namespace BuildWeek4.Controllers
                     stockDisponibile = (int)await checkStockCommand.ExecuteScalarAsync();
                 }
 
-                // Verifica se il prodotto è già nel carrello
-                string checkQuery = "SELECT COUNT(*) FROM Carrello WHERE IdProdotto = @IdProdotto";
+                if(stockDisponibile <= 0)
+                {
+                    TempData["ErrorMessage"] = "Il prodotto non è disponibile!";
+                }
+
+                // Verifica se il prodotto è già nel carrello per quell'utente
+                string checkQuery = "SELECT COUNT(*) FROM Carrello WHERE IdProdotto = @IdProdotto AND IdUtente = @IdUtente";
                 await using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
                     checkCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                    checkCommand.Parameters.AddWithValue("@IdUtente", idUtente);
                     int count = (int)await checkCommand.ExecuteScalarAsync();
 
                     if (count > 0)
                     {
-                        // Se il prodotto è già nel carrello, aggiorna la quantità
-                        string updateQuery = "UPDATE Carrello SET Quantita = Quantita + @Quantita WHERE IdProdotto = @IdProdotto";
+                        // Se il prodotto è già nel carrello per quell'utente, aggiorna la quantità
+                        string updateQuery = "UPDATE Carrello SET Quantita = Quantita + @Quantita WHERE IdProdotto = @IdProdotto AND IdUtente = @IdUtente";
                         await using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
                         {
                             updateCommand.Parameters.AddWithValue("@Quantita", quantita);
                             updateCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                            updateCommand.Parameters.AddWithValue("@IdUtente", idUtente);
                             await updateCommand.ExecuteNonQueryAsync();
                         }
                     }
                     else
                     {
-                        // Se il prodotto non è nel carrello, inseriscilo
-                        string insertQuery = "INSERT INTO Carrello (IdProdotto, Quantita) VALUES (@IdProdotto, @Quantita)";
+                        // Se il prodotto non è nel carrello per quell'utente, inseriscilo
+                        string insertQuery = "INSERT INTO Carrello (IdProdotto, IdUtente, Quantita) VALUES (@IdProdotto, @IdUtente, @Quantita)";
                         await using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
                         {
                             insertCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                            insertCommand.Parameters.AddWithValue("@IdUtente", idUtente);
                             insertCommand.Parameters.AddWithValue("@Quantita", quantita);
                             await insertCommand.ExecuteNonQueryAsync();
                         }
@@ -183,8 +202,9 @@ namespace BuildWeek4.Controllers
                 }
             }
 
-            return RedirectToAction("Details", new {id = idProdotto});
+            return RedirectToAction("Details", new { id = idProdotto });
         }
+
 
         public async Task<IActionResult> Ricerca(string query)
         {

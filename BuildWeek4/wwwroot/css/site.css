@@ -128,6 +128,10 @@ html, body {
     align-self: stretch;
 }
 
+.loginDiv {
+    height: 83vh
+}
+
 .footer-custom {
     color: #022169;
 }
@@ -142,8 +146,10 @@ html, body {
 
 footer {
     border-top: 10px solid #022169;
-    height: 10px;
     line-height: 0 !important;
+}
+.footer[b-4hydpr3f8a] {
+    position: static !important;
 }
 
 .dropImg {
