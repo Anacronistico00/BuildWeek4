@@ -10,7 +10,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Login/Index";  // La pagina di login
         options.LogoutPath = "/Login/Logout";  // La pagina di logout
-        options.ExpireTimeSpan = TimeSpan.FromDays(7);  // Durata della sessione
+        options.ExpireTimeSpan = TimeSpan.FromDays(2);  // Durata della sessione
     });
 
 var app = builder.Build();

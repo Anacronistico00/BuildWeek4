@@ -163,5 +163,17 @@
             image.addEventListener("mouseleave", () => {
                 image.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
             });
+
+            // Controllo se il carrello è stato aggiornato
+            if ('@TempData["CartUpdated"]' === 'True') {
+                let cartIcon = document.getElementById("cartCounter");
+
+                if (cartIcon) {
+                    cartIcon.classList.add("animate-bounce");
+                    setTimeout(() => {
+                        cartIcon.classList.remove("animate-bounce");
+                    }, 1000);
+                }
+            }
         });
 </script>

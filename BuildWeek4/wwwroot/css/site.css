@@ -770,3 +770,17 @@ input[type="checkbox"]:hover {
 .btn-primary-home:hover {
     background-color: #0056b3;
 }
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 0.5s ease-in-out;
+}

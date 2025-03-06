@@ -26,24 +26,55 @@ namespace BuildWeek4.Controllers
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
+        private async Task<int> GetCartItemCount(Guid idUtente)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Query per ottenere il numero di articoli nel carrello
+                string query = "SELECT SUM(Quantita) FROM Carrello WHERE IdUtente = @IdUtente";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@IdUtente", idUtente);
+
+                    var result = await command.ExecuteScalarAsync();
+                    return result != DBNull.Value ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
+
         public async Task<IActionResult> Index()
         {
             var productList = new ProductViewModel()
-            { 
-                Products = new List<Product>() 
+            {
+                Products = new List<Product>()
             };
+
+            // Recupero il numero di articoli nel carrello
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                ViewBag.CartCount = await GetCartItemCount(idUtente);
+            }
+            else
+            {
+                ViewBag.CartCount = 0;
+            }
 
             await using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 string query = "SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, Categorie.NomeCategoria, " +
-                    "Prodotti.URLImmagine, Prodotti.Prezzo FROM Prodotti " +
-                    "INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria";
+                               "Prodotti.URLImmagine, Prodotti.Prezzo FROM Prodotti " +
+                               "INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria";
+
                 await using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     await using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        while(await reader.ReadAsync())
+                        while (await reader.ReadAsync())
                         {
                             productList.Products.Add(
                                 new Product()
@@ -60,11 +91,23 @@ namespace BuildWeek4.Controllers
                 }
             }
 
-                return View(productList);
+            return View(productList);
         }
+
 
         public async Task<IActionResult> Details(Guid id)
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                ViewBag.CartCount = await GetCartItemCount(idUtente);
+            }
+            else
+            {
+                ViewBag.CartCount = 0;
+            }
+
             var details = new Details();
 
             await using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -139,45 +182,49 @@ namespace BuildWeek4.Controllers
         [HttpPost]
         public async Task<IActionResult> AggiungiAlCarrello(Guid idProdotto, int quantita)
         {
-            // Verifica se l'utente è loggato
             if (!User.Identity.IsAuthenticated)
             {
-                // Se non è loggato, reindirizza alla pagina di login
                 return RedirectToAction("Index", "Login");
             }
 
-            // Recupera l'IdUtente dal claim (utente autenticato)
-            Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)); // Assumendo che l'utente sia autenticato
-
-            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
+                Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                // Verifica la disponibilità in stock
-                string checkStockQuery = "SELECT Stock FROM Prodotti WHERE IdProdotto = @IdProdotto";
-                int stockDisponibile = 0;
-                await using (SqlCommand checkStockCommand = new SqlCommand(checkStockQuery, connection))
+                await using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    checkStockCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
-                    stockDisponibile = (int)await checkStockCommand.ExecuteScalarAsync();
-                }
+                    await connection.OpenAsync();
 
-                if(stockDisponibile <= 0)
-                {
-                    TempData["ErrorMessage"] = "Il prodotto non è disponibile!";
-                }
-
-                // Verifica se il prodotto è già nel carrello per quell'utente
-                string checkQuery = "SELECT COUNT(*) FROM Carrello WHERE IdProdotto = @IdProdotto AND IdUtente = @IdUtente";
-                await using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
-                {
-                    checkCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
-                    checkCommand.Parameters.AddWithValue("@IdUtente", idUtente);
-                    int count = (int)await checkCommand.ExecuteScalarAsync();
-
-                    if (count > 0)
+                    // Controlla la disponibilità
+                    string checkStockQuery = "SELECT Stock FROM Prodotti WHERE IdProdotto = @IdProdotto";
+                    int stockDisponibile = 0;
+                    await using (SqlCommand checkStockCommand = new SqlCommand(checkStockQuery, connection))
                     {
-                        // Se il prodotto è già nel carrello per quell'utente, aggiorna la quantità
+                        checkStockCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                        object stockResult = await checkStockCommand.ExecuteScalarAsync();
+                        stockDisponibile = stockResult != DBNull.Value ? Convert.ToInt32(stockResult) : 0;
+                    }
+
+                    if (stockDisponibile <= 0)
+                    {
+                        TempData["ErrorMessage"] = "Prodotto esaurito!";
+                        return RedirectToAction("Details", new { id = idProdotto });
+                    }
+
+                    // Controlla se il prodotto è già nel carrello
+                    string checkQuery = "SELECT Quantita FROM Carrello WHERE IdProdotto = @IdProdotto AND IdUtente = @IdUtente";
+                    int quantitaAttuale = 0;
+                    await using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                    {
+                        checkCommand.Parameters.AddWithValue("@IdProdotto", idProdotto);
+                        checkCommand.Parameters.AddWithValue("@IdUtente", idUtente);
+                        object result = await checkCommand.ExecuteScalarAsync();
+                        quantitaAttuale = result != DBNull.Value ? Convert.ToInt32(result) : 0;
+                    }
+
+                    if (quantitaAttuale > 0)
+                    {
+                        // Se già presente, aggiorna
                         string updateQuery = "UPDATE Carrello SET Quantita = Quantita + @Quantita WHERE IdProdotto = @IdProdotto AND IdUtente = @IdUtente";
                         await using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
                         {
@@ -189,7 +236,7 @@ namespace BuildWeek4.Controllers
                     }
                     else
                     {
-                        // Se il prodotto non è nel carrello per quell'utente, inseriscilo
+                        // Inserisce il nuovo prodotto
                         string insertQuery = "INSERT INTO Carrello (IdProdotto, IdUtente, Quantita) VALUES (@IdProdotto, @IdUtente, @Quantita)";
                         await using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
                         {
@@ -200,14 +247,33 @@ namespace BuildWeek4.Controllers
                         }
                     }
                 }
-            }
 
-            return RedirectToAction("Details", new { id = idProdotto });
+                // Aggiorna il contatore del carrello
+                TempData["CartUpdated"] = true;
+                return RedirectToAction("Details", new { id = idProdotto });
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Errore: " + ex.Message;
+                return RedirectToAction("Details", new { id = idProdotto });
+            }
         }
+
 
 
         public async Task<IActionResult> Ricerca(string query)
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                ViewBag.CartCount = await GetCartItemCount(idUtente);
+            }
+            else
+            {
+                ViewBag.CartCount = 0;
+            }
+
             var risultati = new ProductViewModel()
             {
                 Products = new List<Product>()
@@ -284,6 +350,17 @@ namespace BuildWeek4.Controllers
         //ricerca quando si preme l'immagine
         public async Task<IActionResult> FiltraPerCategoria(string categoria)
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid idUtente = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                ViewBag.CartCount = await GetCartItemCount(idUtente);
+            }
+            else
+            {
+                ViewBag.CartCount = 0;
+            }
+
             var risultati = new ProductViewModel()
             {
                 Products = new List<Product>()
