@@ -63,6 +63,25 @@ namespace BuildWeek4.Controllers
                 return View(productList);
         }
 
+
+        [HttpGet]
+        public IActionResult Profilo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            var email = User.Identity.Name;
+            var isAdmin = User.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value == "1";
+
+            ViewBag.Email = email;
+            ViewBag.IsAdmin = isAdmin;
+
+            return View();
+        }
+
+
         public async Task<IActionResult> Details(Guid id)
         {
             var details = new Details();
