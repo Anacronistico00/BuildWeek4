@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Registrazione";
 }
 
-<div class="BgDiv  loginDiv">
+<div class="BgDiv loginDiv">
     <div class="container mt-5 w-50 roundedDiv">
-        <h2 class="text-center">Login</h2>
+        <h2 class="text-center">Registrati</h2>
 
         @if (ViewBag.Error != null)
         {
@@ -12,6 +12,11 @@
         }
 
         <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <input type="text" class="form-control" name="nome" required>
+            </div>
+
             <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control" name="email" required>
@@ -22,11 +27,9 @@
                 <input type="password" class="form-control" name="password" required>
             </div>
 
-
-            <button type="submit" class="btn btn-primary w-100">Accedi</button>
+            <button type="submit" class="btn btn-primary w-100">Registrati</button>
             <br />
-            <a href="/Login/Registrati" class="btn btn-secondary w-100 mt-2">Registrati</a>
+            <a href="/Login" class="btn btn-secondary w-100 mt-2">Torna al Login</a>
         </form>
     </div>
 </div>
-
