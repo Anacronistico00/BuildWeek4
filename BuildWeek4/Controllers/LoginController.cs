@@ -83,6 +83,58 @@ namespace BuildWeek4.Controllers
             }
         }
 
+
+        //Registra un nuovo utente
+        [HttpGet]
+        public IActionResult Registrati()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Registrati(string nome, string email, string password)
+        {
+            if (string.IsNullOrEmpty(nome) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                ViewBag.Error = "Compila tutti i campi.";
+                return View();
+            }
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Verifica se l'email è già registrata
+                string checkSql = "SELECT COUNT(*) FROM Utenti WHERE Email = @Email";
+                using (var checkCommand = new SqlCommand(checkSql, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@Email", email);
+                    int count = (int)await checkCommand.ExecuteScalarAsync();
+
+                    if (count > 0)
+                    {
+                        ViewBag.Error = "Email già registrata.";
+                        return View();
+                    }
+                }
+
+                // Inserisci il nuovo utente
+                string insertSql = "INSERT INTO Utenti (IdUtente, Nome, Email, UserPassword, IsAdmin) VALUES (@IdUtente, @Nome, @Email, @Password, 0)";
+                using (var insertCommand = new SqlCommand(insertSql, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@IdUtente", Guid.NewGuid());
+                    insertCommand.Parameters.AddWithValue("@Nome", nome);
+                    insertCommand.Parameters.AddWithValue("@Email", email);
+                    insertCommand.Parameters.AddWithValue("@Password", password);
+
+                    await insertCommand.ExecuteNonQueryAsync();
+                }
+
+                ViewBag.Success = "Registrazione completata! Ora puoi effettuare il login.";
+                return RedirectToAction("Index");
+            }
+        }
+
         public IActionResult Logout()
         {
             // Esegui il logout e reindirizza alla pagina di login
@@ -91,3 +143,4 @@ namespace BuildWeek4.Controllers
         }
     }
 }
+
