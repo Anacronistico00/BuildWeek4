@@ -225,30 +225,67 @@ namespace BuildWeek4.Controllers
         }
 
 
-        public async Task<IActionResult> Ricerca(string query)
+        //ricerca con filtri
+        public async Task<IActionResult> Ricerca(string query, string filtro, string categoria)
         {
             var risultati = new ProductViewModel()
             {
                 Products = new List<Product>()
             };
 
-            if (string.IsNullOrEmpty(query))
-            {
-                return View(risultati); // Nessun risultato se la query è vuota
-            }
+            query = query ?? "";
+            categoria = categoria ?? "";
 
-            await using (SqlConnection connection = new SqlConnection(_connectionString))
+            await using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
+
                 string sqlQuery = @"SELECT Prodotti.IdProdotto, Prodotti.Dettaglio, Prodotti.Descrizione, 
                             Categorie.NomeCategoria, Prodotti.URLImmagine, Prodotti.Prezzo 
                             FROM Prodotti 
                             INNER JOIN Categorie ON Prodotti.IdCategoria = Categorie.IdCategoria
-                            WHERE Prodotti.Dettaglio LIKE @Query OR Prodotti.Descrizione LIKE @Query";
+                            WHERE (1 = 1)";
 
-                await using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                if (!string.IsNullOrEmpty(query))
                 {
-                    command.Parameters.AddWithValue("@Query", "%" + query + "%");
+                    sqlQuery += " AND (Prodotti.Dettaglio LIKE @Query OR Prodotti.Descrizione LIKE @Query)";
+                }
+
+                if (!string.IsNullOrEmpty(categoria))
+                {
+                    sqlQuery += " AND Categorie.NomeCategoria = @Categoria";
+                }
+
+                switch (filtro)
+                {
+                    case "prezzo_asc":
+                        sqlQuery += " ORDER BY Prodotti.Prezzo ASC";
+                        break;
+                    case "prezzo_desc":
+                        sqlQuery += " ORDER BY Prodotti.Prezzo DESC";
+                        break;
+                    case "alfabetico_asc":
+                        sqlQuery += " ORDER BY Prodotti.Dettaglio ASC";
+                        break;
+                    case "alfabetico_desc":
+                        sqlQuery += " ORDER BY Prodotti.Dettaglio DESC";
+                        break;
+                    
+                    default:
+                        sqlQuery += " ORDER BY Prodotti.Dettaglio ASC";
+                        break;
+                }
+
+                await using (var command = new SqlCommand(sqlQuery, connection))
+                {
+                    if (!string.IsNullOrEmpty(query))
+                    {
+                        command.Parameters.AddWithValue("@Query", "%" + query + "%");
+                    }
+                    if (!string.IsNullOrEmpty(categoria))
+                    {
+                        command.Parameters.AddWithValue("@Categoria", categoria);
+                    }
 
                     await using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
@@ -266,6 +303,7 @@ namespace BuildWeek4.Controllers
                         }
                     }
                 }
+
                 var productList = new ProductViewModel()
                 {
                     Products = new List<Product>()
@@ -292,10 +330,13 @@ namespace BuildWeek4.Controllers
                         }
                     }
 
-                    // Assegna la lista dei prodotti a ViewBag
                     ViewBag.ProductsList = productList.Products;
                 }
             }
+
+            ViewBag.Filtro = filtro;
+            ViewBag.Query = query;
+            ViewBag.Categoria = categoria;
 
             return View(risultati);
         }

@@ -16,6 +16,45 @@
         <h1 class="mb-4">Risultati della ricerca</h1>
     }
 
+        @{
+            var filtro = ViewBag.Filtro as string;
+            var filtri = new Dictionary<string, string>
+        {
+        { "", "-- Seleziona --" },
+        { "prezzo_asc", "Prezzo più basso" },
+        { "prezzo_desc", "Prezzo più alto" },
+        { "alfabetico_asc", "Nome A-Z" },
+        { "alfabetico_desc", "Nome Z-A" },
+        };
+        }
+
+        <form method="get" action="/Home/Ricerca" class="row g-2 align-items-center mb-4">
+
+            <input type="hidden" name="Categoria" value="@ViewBag.Categoria" />
+
+            <div class="col-auto">
+                <label for="filtro" class="form-label mb-0">Ordina per:</label>
+            </div>
+
+            <div class="col-auto">
+                <select class="form-select" name="filtro" id="filtro" onchange="this.form.submit()">
+                    @foreach (var item in filtri)
+                    {
+                        if (item.Key == filtro)
+                        {
+                            <text>
+                            <option value="@item.Key" selected>@item.Value</option></text>
+                        }
+                        else
+                        {
+                            <text>
+                            <option value="@item.Key">@item.Value</option></text>
+                        }
+                    }
+                </select>
+            </div>
+
+        </form>
     @if (!Model.Products.Any())
     {
         <div class="alert alert-warning">
